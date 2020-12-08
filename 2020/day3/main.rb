@@ -1,24 +1,47 @@
-$current_x, $current_y = 0, 0
-$tree_count = 0
+# frozen_string_literal: true
 
-def traverse
-  1.times do
-    if $current_x == 30
-      ($current_x = 0)
+def geomap
+  File.open('./data.txt', 'r').readlines.map(&:chars)
+end
+
+def traverse(slope, terrain, current_x, current_y, tree_count)
+  slope[0].times do
+    if current_x == 30
+      (current_x = 0)
     else
-      $current_x += 1
+      current_x += 1
     end
   end
-  $current_y += 2
-  return unless $current_y < $geomap.length
-  $tree_count+= 1 if $geomap[$current_y][$current_x] == "#"
-  puts "current_y: #{$current_y}, current_x: #{$current_x}, tree_count: #{$tree_count}"
+  current_y += slope[1]
+  tree_count += 1 if current_y < terrain.length && terrain.dig(current_y, current_x) == '#'
+  [current_x, current_y, tree_count]
 end
 
-$geomap.each do
-  break if $current_y >= $geomap.length
+def part1
+  slope = [3, 1]
+  current_x, current_y, tree_count = 0, 0, 0
+  terrain = geomap
+  terrain.each do
+    break if current_y >= terrain.length
 
-  traverse
+    current_x, current_y, tree_count = traverse(slope, terrain, current_x, current_y, tree_count)
+  end
+  tree_count
 end
 
-puts "FINAL: current_y: #{$current_y}, current_x: #{$current_x}, tree_count: #{$tree_count}"
+def part2
+  slopes = [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]]
+  slopes.map do |slope|
+    current_x, current_y, tree_count = 0, 0, 0
+    terrain = geomap
+    terrain.each do
+      break if current_y >= terrain.length
+
+      current_x, current_y, tree_count = traverse(slope, terrain, current_x, current_y, tree_count)
+    end
+    tree_count
+  end.inject(:*)
+end
+
+puts "part1 solution: #{part1}"
+puts "part2 solution: #{part2}"

@@ -1,24 +1,29 @@
-require 'pry'
-
-baggage_rules = file = File.open('./aoc7dat.rb', 'r').readlines
-#$ baggage_rules = file = File.open('./aoc7ex.rb', 'r').readlines
-
-$baggage_rules = baggage_rules.inject({}) do |rules, baggage_rule|
-  outerbag, holding_bags = baggage_rule.split('contain').map(&:strip)
-  if !holding_bags.match('no other bags')
-    holding_bags = holding_bags.split(',').map(&:strip)
-    holding_bags = holding_bags.inject({}) do |mem, holding_bag_spec|
-      holding_bag_count = holding_bag_spec.match(/\d/).to_s
-      mem[holding_bag_spec.gsub(holding_bag_count, '').strip.gsub(/[^a-zA-Z0-9\s]/, '').gsub('bags', 'bag')] = holding_bag_count.to_i
-      mem
-    end
-  else
-    holding_bags = {}
-  end
-  rules[outerbag.gsub('bags', 'bag')] = holding_bags
-  rules
+def raw_baggage_rules
+  File.open('./data.txt', 'r').readlines
 end
 
+def parse_baggage_rules(raw_data)
+  raw_data.inject({}) do |rules, baggage_rule|
+    outerbag, holding_bags = baggage_rule.split('contain').map(&:strip)
+    if !holding_bags.match('no other bags')
+      holding_bags = holding_bags.split(',').map(&:strip)
+      holding_bags = holding_bags.inject({}) do |mem, holding_bag_spec|
+        holding_bag_count = holding_bag_spec.match(/\d/).to_s
+        mem[holding_bag_spec.gsub(holding_bag_count, '')
+          .strip
+          .gsub(/[^a-zA-Z0-9\s]/, '')
+          .gsub('bags', 'bag')] = holding_bag_count.to_i
+        mem
+      end
+    else
+      holding_bags = {}
+    end
+    rules[outerbag.gsub('bags', 'bag')] = holding_bags
+    rules
+  end
+end
+
+$baggage_rules = parse_baggage_rules(raw_baggage_rules)
 $total_bags = []
 
 def search(bag)
@@ -41,9 +46,7 @@ def find_count(bag, multiplier=1)
   end
 end
 
+puts "(part 1) number of bags that can evetually contain atleast one shiny gold bag: #{$total_bags.uniq.count}"
 
-
-puts $total_bags.uniq.inspect
-puts "count: #{$total_bags.uniq.count}"
-
-puts "TOTAL COUNT: #{$total_count}"
+find_count('shiny gold bag')
+puts "(part 2) shiny gold bag  can hold: #{$total_count} bags"

@@ -1,9 +1,7 @@
-require 'pry'
-
-# part1
+# frozen_string_literal: true
 
 class DockingData
-  INVALID_BIN = 'X'
+  INVALID_BIN = 'X'.freeze
   BITSIZE     = 36
 
   def data
@@ -15,24 +13,26 @@ class DockingData
   end
 
   def memory_sum
-    @mem.values.compact.sum
+    @mem.values.sum
   end
 
   def reset
-    @mem, @mask = {}, ''
+    @mem = {}
   end
 
   def part1
     data.each do |instr|
-      cmd, arg = instr.split('=').map(&:strip)
-      eval "@#{cmd} = #{cmd.match('mask') ? "'#{arg}'" : "process_data_bits(#{arg})"}"
+      cmd, arg = instr.strip.split(' = ')
+      eval <<-RUBY, __FILE__, __LINE__ + 1
+        @#{cmd} = #{cmd.match('mask') ? "'#{arg}'" : "process_data_bits(#{arg})"}
+      RUBY
     end
     memory_sum
   end
 
   def part2
     data.each do |instr|
-      cmd, arg = instr.split('=').map(&:strip)
+      cmd, arg = instr.strip.split(' = ')
       eval("@#{cmd} = '#{arg}'") && next if cmd.match(/mask/)
 
       store_at_varied_addresses(cmd.match(/\d+/).to_s.to_i, arg)
@@ -45,8 +45,8 @@ class DockingData
       mbit == '0' ? abit : mbit
     end.join('')
 
-    fbit_permutations(@mask.count('X')).map do |bit_arrangement|
-      address = floating_addr.gsub('X', '%d')
+    fbit_permutations(@mask.count(INVALID_BIN)).map do |bit_arrangement|
+      address = floating_addr.gsub(INVALID_BIN, '%d')
       @mem[(address % bit_arrangement.chars).to_i(2)] = ddata.to_i
     end
   end

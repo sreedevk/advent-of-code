@@ -8,9 +8,17 @@ require 'nokogiri'
 require 'ostruct'
 
 # template for a problem
-class Template
+class AOC
   BASE_URL = 'https://adventofcode.com'
   APP_ROOT = File.dirname(__FILE__)
+  CONFIG   = {
+    files: {
+      problem_file: 'README.md',
+      data_file: 'data.txt',
+      example_file: 'example.txt',
+      solution_file: 'main.rb'
+    }
+  }.freeze
 
   attr_accessor :problem
 
@@ -26,13 +34,17 @@ class Template
     end
   end
 
+  def self.run
+    puts system("ruby #{File.join(Dir.pwd.to_s, CONFIG[:files][:solution_file])} #{File.join(Dir.pwd.to_s, CONFIG[:files][:"#{ARGV[1] || 'data'}_file"])}")
+  end
+
   def initialize
-    run
+    load_template
   end
 
   private
 
-  def run
+  def load_template
     set_time_records
     create_files
     fetch_problem
@@ -50,7 +62,7 @@ class Template
   def create_files
     @problem_dir = File.join(APP_ROOT, '..', @year, "day#{@day}")
     FileUtils.mkdir_p(@problem_dir)
-    config[:files].map do |file_type, file_name|
+    CONFIG[:files].map do |file_type, file_name|
       instance_variable_set(
         "@#{file_type}",
         File.open(
@@ -87,11 +99,11 @@ class Template
 
   def solution_template
     <<-RUBY
-      class #{problem_class}
-        def data
-          @data ||= ARGF.readlines
-        end
+    class #{problem_class}
+      def data
+        @data ||= ARGF.readlines
       end
+    end
     RUBY
   end
 
@@ -103,7 +115,7 @@ class Template
   end
 
   def close_files
-    config[:files].keys.map do |file_var|
+    CONFIG[:files].keys.map do |file_var|
       file = instance_variable_get("@#{file_var}")
       file.close
     end
@@ -111,17 +123,6 @@ class Template
 
   def api_client
     @api_client ||= Faraday.new(url: BASE_URL)
-  end
-
-  def config
-    @config ||= {
-      files: {
-        problem_file:  'README.md',
-        data_file:     'data.txt',
-        example_file:  'example.txt',
-        solution_file: 'main.rb'
-      }.freeze
-    }
   end
 
   def request_headers
@@ -171,4 +172,4 @@ class Template
   end
 end
 
-Template.send(ARGV[0] || :usage)
+AOC.send(ARGV[0] || :usage)

@@ -5,6 +5,7 @@
 require 'faraday'
 require 'fileutils'
 require 'nokogiri'
+require 'ostruct'
 
 # template for a problem
 class Template
@@ -12,6 +13,18 @@ class Template
   APP_ROOT = File.dirname(__FILE__)
 
   attr_accessor :problem
+
+  def self.usage
+    puts ' --- Advent of Code --- '
+    puts 'aoc new <year> <day>'
+    puts 'aoc auth <cookie>'
+  end
+
+  def self.auth
+    File.open(File.join(APP_ROOT, '.cookie'), 'w+') do |cf|
+      cf.puts ARGV[1]
+    end
+  end
 
   def initialize
     run
@@ -65,7 +78,7 @@ class Template
   end
 
   def parse_problem
-    @problem = OpenStruct.new
+    @problem = ::OpenStruct.new
     @problem_document = Nokogiri::HTML(fetch_problem)
     parse_problem_title
     parse_problem_example
@@ -121,7 +134,7 @@ class Template
       'sec-fetch-user' => '?1',
       'sec-fetch-dest' => 'document',
       'referer' => "https://adventofcode.com#{input_url}",
-      'cookie' => 'session=53616c7465645f5f6c8c4e7883cf66a4b12475d1fac4ba397b867878d9a8a3909097ad7be5e4f63bed92b360f5c48077'
+      'cookie' => "session=#{cookie}"
     }
   end
 
@@ -149,9 +162,13 @@ class Template
     @problem.title.split(':').last.match(/[a-zA-Z\s+]+/).to_s.strip.delete(' ')
   end
 
+  def cookie
+    @cookie ||= File.open(File.join(APP_ROOT, '.cookie'), 'r').read
+  end
+
   def problem_url
     "/#{@year}/day/#{@day}"
   end
 end
 
-Template.send(ARGV[0])
+Template.send(ARGV[0] || :usage)

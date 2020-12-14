@@ -1,15 +1,17 @@
 require 'pry'
 
-class DockingData
-  attr_accessor :mem, :mask
+# part1
 
-  def initialize
-    @mem          = {}
-    @mask         = ''
-  end
+class DockingData
+  INVALID_BIN = 'X'
+  BITSIZE     = 36
 
   def data
     @data ||= ARGF.readlines
+  end
+
+  def initialize
+    reset
   end
 
   def memory_sum
@@ -17,80 +19,53 @@ class DockingData
   end
 
   def reset
-    @mem  = {}
-    @mask = ''
+    @mem, @mask = {}, ''
   end
 
   def part1
-    data.each do |instruction|
-      command, arg = instruction.split('=').map(&:strip)
-      if command.match(/mask/)
-        @mask = arg
-      else
-        eval("@#{command} = process_bits_with_mask(#{arg})") 
-      end
+    data.each do |instr|
+      cmd, arg = instr.split('=').map(&:strip)
+      eval "@#{cmd} = #{cmd.match('mask') ? "'#{arg}'" : "process_data_bits(#{arg})"}"
     end
+    memory_sum
   end
 
   def part2
-    data.each do |instruction|
-      command, arg = instruction.split('=').map(&:strip)
-      if command.match(/mask/)
-        @mask = arg
-      else
-        # addresses = decode_address(command.match(/\d+/).to_s.to_i)
-        addresses = decode_addr(command.match(/\d+/).to_s.to_i)
-        addresses.map {|addr| @mem[addr] = arg.to_i }
-      end
+    data.each do |instr|
+      cmd, arg = instr.split('=').map(&:strip)
+      eval("@#{cmd} = '#{arg}'") && next if cmd.match(/mask/)
+
+      store_at_varied_addresses(cmd.match(/\d+/).to_s.to_i, arg)
     end
+    memory_sum
   end
 
-  def floating_bit_combinations
-    (2 ** @mask.count('X')).times.map do |fcomb|
-      fcomb.to_s(2).rjust(@mask.count('X'), "0") 
-    end
-  end
-
-  def decode_address(addr)
-    masks = floating_bit_combinations.map do |bit_arrangement|
-      dup_mask = @mask.dup.gsub('X', '%d')
-      dup_mask % bit_arrangement.chars
-    end
-
-    bin_addr = addr.to_s(2).rjust(36, '0')
-
-    masks.map do |cmask|
-      cmask.chars.zip(bin_addr.chars).map do |mask_bit, val_bit|
-        mask_bit == '1' ? '1' : val_bit
-      end.join('').to_i(2)
-    end.uniq
-  end
-
-  def decode_addr(addr)
-    address = @mask.chars.zip(addr.to_s(2).rjust(36, '0').chars).map do |mbit, abit|
-      mbit == 'X' || mbit == '1' ? mbit : abit
+  def store_at_varied_addresses(addr, ddata)
+    floating_addr = @mask.chars.zip(addr.to_s(2).rjust(BITSIZE, '0').chars).map do |mbit, abit|
+      mbit == '0' ? abit : mbit
     end.join('')
 
-    floating_bit_combinations.map do |fbit_arrangement|
-      address = address.gsub('X', '%d')
-      (address % fbit_arrangement.chars).to_i(2)
+    fbit_permutations(@mask.count('X')).map do |bit_arrangement|
+      address = floating_addr.gsub('X', '%d')
+      @mem[(address % bit_arrangement.chars).to_i(2)] = ddata.to_i
     end
   end
 
-  def process_bits_with_mask(decimal)
-    binary = decimal.to_s(2).rjust(36, "0")
-    @mask.chars.zip(binary.chars).map.with_index do |compare_bits, index|
-      mask_bit, val_bit = compare_bits
-      mask_bit.downcase == 'x' ? val_bit : mask_bit
+  def fbit_permutations(digits)
+    (2**digits).times.map do |int|
+      int.to_s(2).rjust(digits, '0')
+    end
+  end
+
+  def process_data_bits(decimal_data)
+    @mask.chars.zip(decimal_data.to_s(2).rjust(BITSIZE, '0').chars).map do |mask_bit, val_bit|
+      mask_bit == INVALID_BIN ? val_bit : mask_bit
     end.join('').to_i(2)
   end
 end
 
 dd = DockingData.new
-# dd.part1
-# puts "part1: memory sum: #{dd.memory_sum}"
+puts "part1: memory sum = #{dd.part1}"
 
 dd.reset
-
-dd.part2
-puts "part2: memory sum: #{dd.memory_sum}"
+puts "part2: memory sum = #{dd.part2}"

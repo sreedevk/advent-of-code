@@ -6,6 +6,7 @@ require 'faraday'
 require 'fileutils'
 require 'nokogiri'
 require 'ostruct'
+require 'colorize'
 
 # template for a problem
 class AOC
@@ -23,9 +24,22 @@ class AOC
   attr_accessor :problem
 
   def self.usage
-    puts ' --- Advent of Code --- '
-    puts 'aoc new <year> <day>'
-    puts 'aoc auth <cookie>'
+    puts splash.colorize(:blue)
+    puts 'Usage:'.colorize(:red)
+    commands.map do |command_usage|
+      puts command_usage[0].colorize(:yellow)
+      puts command_usage[1].colorize(:green)
+      puts
+    end
+  end
+
+  def self.commands
+    [
+      ['Fetch a problem & create files in ./<year>/<day>/', 'aoc new <year(default: current_year)> <day(default: today)>'],
+      ['Set Cookie for your AOC Account Copied from the browser', 'aoc auth <cookie>'],
+      ['Run solution `main.rb` using the data.txt as ARGF', 'cd <problem_path> && aoc run'],
+      ['Run solution `main.rb` using the example.txt as ARGF', 'cd <problem_path> && aoc run example']
+    ]
   end
 
   def self.auth
@@ -35,11 +49,29 @@ class AOC
   end
 
   def self.run
-    puts system("ruby #{File.join(Dir.pwd.to_s, CONFIG[:files][:solution_file])} #{File.join(Dir.pwd.to_s, CONFIG[:files][:"#{ARGV[1] || 'data'}_file"])}")
+    puts system(
+      <<-SH
+        ruby\
+        #{File.join(Dir.pwd.to_s, CONFIG[:files][:solution_file])}\
+        #{File.join(Dir.pwd.to_s, CONFIG[:files][:"#{ARGV[1] || 'data'}_file"])}
+      SH
+    )
   end
 
   def initialize
     load_template
+  end
+
+  def self.splash
+    <<-SPLASH
+
+       █████  ██████  ██    ██ ███████ ███    ██ ████████      ██████  ███████      ██████  ██████  ██████  ███████ 
+      ██   ██ ██   ██ ██    ██ ██      ████   ██    ██        ██    ██ ██          ██      ██    ██ ██   ██ ██      
+      ███████ ██   ██ ██    ██ █████   ██ ██  ██    ██        ██    ██ █████       ██      ██    ██ ██   ██ █████   
+      ██   ██ ██   ██  ██  ██  ██      ██  ██ ██    ██        ██    ██ ██          ██      ██    ██ ██   ██ ██      
+      ██   ██ ██████    ████   ███████ ██   ████    ██         ██████  ██           ██████  ██████  ██████  ███████
+
+    SPLASH
   end
 
   private
@@ -132,8 +164,7 @@ class AOC
       'upgrade-insecure-requests' => '1',
       'sec-fetch-site' => 'same-origin',
       'sec-fetch-mode' => 'navigate',
-      'sec-fetch-user' => '?1',
-      'sec-fetch-dest' => 'document',
+      'sec-fetch-user' => '?1', 'sec-fetch-dest' => 'document',
       'referer' => "https://adventofcode.com#{input_url}",
       'cookie' => "session=#{cookie}"
     }

@@ -88,5 +88,4 @@ w = TicketTranslation.new
 puts "part1: ERROR_SCANNING_RATE: #{w.error_scanning_rate}" 
 puts
 
-w.match_fields
 puts "part2: DEPARTURE_FIELD_PRODUCT: #{w.departure_field_product}"

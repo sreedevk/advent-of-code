@@ -5,7 +5,7 @@ class OperationOrder
   MULTIPLICATION = '*'
   OPERATORS      = [ADDITION, MULTIPLICATION]
 
-  def initialize(op=nil)
+  def initialize(op)
     @order_of_precedence = op
   end
 
@@ -13,23 +13,7 @@ class OperationOrder
     @data ||= File.open("#{ARGV[0]}", 'r').readlines
   end
 
-  def solve_simple_problem(tokens)
-    operated_tokens = tokens.dup
-    while(operated_tokens.size > 1)
-      tokens.length.pred.times.map do |index|
-        if OPERATORS.include?(operated_tokens[index])
-          operated_tokens[index.next] = eval("#{operated_tokens[index.pred]} #{operated_tokens[index]} #{operated_tokens[index.next]}")
-          operated_tokens.shift(2)
-          break
-        end
-      end
-    end
-    return operated_tokens[0]
-  end
-
   def solve_simple_using_op(tokens)
-    return solve_simple_problem(tokens) if @order_of_precedence.nil?
-
     operated_tokens = tokens.dup
     while(operated_tokens.size > 1)
       @order_of_precedence.length.times.map do |selected_op_index|
@@ -77,8 +61,8 @@ class OperationOrder
   end
 end
 
-p1 = OperationOrder.new
+p1 = OperationOrder.new(['*', '+'])
 puts "part1: #{p1.solve_problems.sum}"
 
-p2 = OperationOrder.new(["+", "*"])
+p2 = OperationOrder.new(['+', '*'])
 puts "part2: #{p2.solve_problems.sum}"

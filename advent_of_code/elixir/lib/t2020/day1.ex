@@ -1,10 +1,8 @@
 defmodule T2020.Day1 do
   def solve(1) do
     data = dstream()
-
-    data |> Enum.filter(fn value -> 
-      Enum.member?(data, 2020 - value)
-    end)
+    data 
+    |> Enum.filter(fn value -> Enum.member?(data, 2020 - value) end)
     |> Enum.product
   end
 
@@ -12,9 +10,8 @@ defmodule T2020.Day1 do
     data = dstream()
 
     cartesian_product = for x <- data, y <- data, z <- data, do: [x, y, z]
-    cartesian_product |> Enum.filter(fn set ->
-      Enum.sum(set) == 2020
-    end)
+    cartesian_product
+    |> Enum.filter(fn set -> Enum.sum(set) == 2020 end)
     |> Enum.map(&Enum.sort/1)
     |> Enum.uniq
     |> Enum.map(&Enum.product/1)

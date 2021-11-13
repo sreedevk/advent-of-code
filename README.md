@@ -1,42 +1,86 @@
 # Advent Of Code Solutions
 
 ```
+
 .
 ├── elixir
-│   ├── data
-│   │   ├── 2017
-│   │   │   ├── day1.txt
-│   │   │   └── day2.txt
-│   │   └── 2020
-│   │       ├── day1.txt
-│   │       ├── day2.txt
-│   │       ├── day3.txt
-│   │       ├── day4.txt
-│   │       ├── day5.txt
-│   │       ├── day6.txt
-│   │       ├── day7.txt
-│   │       └── day8.txt
-│   ├── lib
-│   │   ├── advent_of_code.ex
-│   │   ├── t2017
-│   │   │   ├── day1.ex
-│   │   │   └── day2.ex
-│   │   ├── t2020
-│   │   │   ├── day1.ex
-│   │   │   ├── day2.ex
-│   │   │   ├── day3.ex
-│   │   │   ├── day4.ex
-│   │   │   ├── day5.ex
-│   │   │   ├── day6.ex
-│   │   │   ├── day7.ex
-│   │   │   └── day8.ex
-│   │   └── t2021
-│   ├── mix.exs
-│   ├── mix.lock
-│   ├── README.md
-│   └── test
-│       ├── advent_of_code_test.exs
-│       └── test_helper.exs
+│   └── 2020
+│       ├── day01
+│       │   ├── data.txt
+│       │   ├── lib
+│       │   │   ├── day01.ex
+│       │   │   └── mix
+│       │   │       └── tasks
+│       │   │           └── solve.ex
+│       │   ├── mix.exs
+│       │   └── README.md
+│       ├── day02
+│       │   ├── data.txt
+│       │   ├── lib
+│       │   │   ├── day02.ex
+│       │   │   └── mix
+│       │   │       └── tasks
+│       │   │           └── solve.ex
+│       │   ├── mix.exs
+│       │   └── README.md
+│       ├── day03
+│       │   ├── data.txt
+│       │   ├── lib
+│       │   │   ├── day03.ex
+│       │   │   └── mix
+│       │   │       └── tasks
+│       │   │           └── solve.ex
+│       │   ├── mix.exs
+│       │   └── README.md
+│       ├── day04
+│       │   ├── data.txt
+│       │   ├── lib
+│       │   │   ├── day04.ex
+│       │   │   └── mix
+│       │   │       └── tasks
+│       │   │           └── solve.ex
+│       │   ├── mix.exs
+│       │   └── README.md
+│       ├── day05
+│       │   ├── data.txt
+│       │   ├── lib
+│       │   │   ├── day05.ex
+│       │   │   └── mix
+│       │   │       └── tasks
+│       │   │           └── solve.ex
+│       │   ├── mix.exs
+│       │   └── README.md
+│       ├── day06
+│       │   ├── data.txt
+│       │   ├── lib
+│       │   │   ├── day06.ex
+│       │   │   └── mix
+│       │   │       └── tasks
+│       │   │           └── solve.ex
+│       │   ├── mix.exs
+│       │   ├── README.md
+│       │   └── test
+│       │       ├── day06_test.exs
+│       │       └── test_helper.exs
+│       ├── day07
+│       │   ├── data.txt
+│       │   ├── lib
+│       │   │   ├── day07.ex
+│       │   │   └── mix
+│       │   │       └── tasks
+│       │   │           └── solve.ex
+│       │   ├── mix.exs
+│       │   └── README.md
+│       ├── day08
+│       │   ├── data.txt
+│       │   ├── lib
+│       │   │   ├── day08.ex
+│       │   │   └── mix
+│       │   │       └── tasks
+│       │   │           └── solve.ex
+│       │   ├── mix.exs
+│       │   └── README.md
+│       └── README.md
 ├── README.md
 └── ruby
     ├── 2015
@@ -145,5 +189,6 @@
     │   └── aoc
     └── README.md
 
-35 directories, 107 files
+109 directories, 196 files
+
 ```

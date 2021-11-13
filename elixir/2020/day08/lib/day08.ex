@@ -1,9 +1,11 @@
-defmodule T2020.Day8 do
+defmodule Day08 do
   def solve(1) do
     fetch_instructions()
     |> parse_instructions()
     |> emulate(%{pc: 0, acc: 0})
   end
+
+  def solve(2), do: nil
 
   defp parse_instructions(raw_seq) do
     raw_seq
@@ -36,7 +38,7 @@ defmodule T2020.Day8 do
   defp exec([:acc, arg], machine), do: %{pc: machine.pc + 1, acc: machine.acc + arg}
 
   defp fetch_instructions do
-    File.stream!("data/2020/day8.txt")
+    File.stream!("data.txt")
     |> Stream.map(&String.trim/1)
     |> Stream.map(&String.split(&1, " "))
   end

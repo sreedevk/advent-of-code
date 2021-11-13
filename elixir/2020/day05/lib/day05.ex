@@ -1,4 +1,4 @@
-defmodule T2020.Day5 do
+defmodule Day05 do
   @seat_match Regex.recompile!(~r/^(?<row_spec>(F|B){7})(?<col_spec>(L|R){3})$/)
   def solve(1) do
     dstream()
@@ -21,7 +21,7 @@ defmodule T2020.Day5 do
   end
 
   defp dstream do
-    File.stream!("data/2020/day5.txt")
+    File.stream!("data.txt")
     |> Stream.map(&String.trim/1)
     |> Stream.filter(&(&1 != ""))
   end

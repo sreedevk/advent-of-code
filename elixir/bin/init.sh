@@ -20,6 +20,10 @@ else
   rm -rf test
   mkdir -p lib/mix/tasks/
   sed "s/01/$(printf "%02d" $2)/" "$SCRIPT_DIR/solve_task_template.ex" > lib/mix/tasks/solve.ex
+  curl -v --cookie \
+    "session=$SESSION" \
+    https://adventofcode.com/$1/day/$2/input > data.txt
+
   echo "Generated Files - Year $1 Day$(printf "%02d\n" $2)"
 fi
 

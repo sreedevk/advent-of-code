@@ -4,11 +4,11 @@ class SonarSweep
   end
 
   def solve_1
-    data.each_cons(2).select {|x, y| y > x }.count
+    data.each_cons(2).count {|x, y| y > x }
   end
 
   def solve_2
-    data.map(&:to_i).each_cons(3).map(&:sum).each_cons(2).select {|x, y| y > x }.count
+    data.map(&:to_i).each_cons(3).map(&:sum).each_cons(2).count {|x, y| y > x }
   end
 end
 

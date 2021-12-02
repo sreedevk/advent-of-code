@@ -19,18 +19,18 @@ defmodule Day02 do
   defp calculate_aimed_coordinates(current_coordinates, instruction) do
     case instruction do
       ["forward", mag] ->
-      Map.update!(current_coordinates, :length, fn current_length -> current_length + mag end)
-      |> Map.update!(:depth, fn current_depth -> current_depth + (Map.fetch!(current_coordinates, :aim) * mag)end)
-      ["down", mag] -> Map.update!(current_coordinates, :aim, fn current_aim -> current_aim + mag end)
-      ["up", mag] -> Map.update!(current_coordinates, :aim, fn current_aim -> current_aim - mag end)
+      Map.update!(current_coordinates, :length, &(&1 + mag))
+      |> Map.update!(:depth, fn current_depth -> current_depth + (Map.fetch!(current_coordinates, :aim) * mag) end)
+      ["down", mag] -> Map.update!(current_coordinates, :aim, &(&1 + mag))
+      ["up", mag] -> Map.update!(current_coordinates, :aim, &(&1 - mag))
     end
   end
 
   defp calculate_next_coordinates(current_coordinates, instruction) do
     case instruction do
-      ["forward", mag] -> %{depth: Map.fetch!(current_coordinates, :depth), length: Map.fetch!(current_coordinates, :length) + mag}
-      ["down", mag] -> %{depth: Map.fetch!(current_coordinates, :depth) + mag, length: Map.fetch!(current_coordinates, :length)}
-      ["up", mag] -> %{depth: Map.fetch!(current_coordinates, :depth) - mag, length: Map.fetch!(current_coordinates, :length)}
+      ["forward", mag] -> Map.update!(current_coordinates, :length, &(&1 + mag))
+      ["down", mag] -> Map.update!(current_coordinates, :depth, &(&1 + mag))
+      ["up", mag] -> Map.update!(current_coordinates, :depth, &(&1 - mag))
     end
   end
 

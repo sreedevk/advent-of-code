@@ -1,5 +1,7 @@
 # Advent Of Code Solutions
 
+![cxud1s5i396p0nrkz2v4](https://user-images.githubusercontent.com/36154121/144250485-dcf907f5-57a8-4137-8e7a-41e0fe89bce3.png)
+
 ### Completed Solutions Map
 
 #### Elixir

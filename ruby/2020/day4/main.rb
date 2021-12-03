@@ -1,35 +1,32 @@
-required_fields = %w(byr iyr eyr hgt hcl ecl pid) # cid is optional
-
-raw_passport_data = File.open('./data.txt', 'r').read
-processed_passports = raw_passport_data.split("\n\n")
-
-processed_passports.map! do |processed_passport_data|
-  passport_data_hash = {}
-  processed_passport_data.gsub("\n", ' ').split(' ').map do |pp_field|
-    key, value = pp_field.split(':')
-    passport_data_hash[key] = value
+class PassportProcessing
+  def data
+    @data ||= ARGF
+      .read
+      .split("\n\n")
+      .map { _1.gsub("\n", ' ').split(' ').inject({}){|store, keyval| store.merge(Hash[*keyval.split(?:)]) } }
   end
-  passport_data_hash
-end
 
-valid_passports_1 = processed_passports.select do |passport|
-  required_fields.all? do |req_field|
-    passport.key?(req_field)
+  def part1
+    data.count { |passport| %w(byr iyr eyr hgt hcl ecl pid).all?(&passport.method(:key?)) }
+  end
+
+  def part2
+    data
+      .select { |passport| %w(byr iyr eyr hgt hcl ecl pid).all?(&passport.method(:key?)) }
+      .count do |passport| 
+        (1920..2002).cover?(passport['byr'].to_i) &&
+        (2010..2020).cover?(passport['iyr'].to_i) &&
+        (2020..2030).cover?(passport['eyr'].to_i) &&
+        %w[amb blu brn gry grn hzl oth].include?(passport['ecl']) &&
+        passport['pid'].to_s.match(/^[0-9]{9}$/) &&
+        passport['hcl'].to_s.match(/^#[0-9a-f]{6}$/) &&
+        { 'cm' => (150..193), 'in' => (59..76) }
+          .fetch(String(String(passport['hgt']).match(/(cm|in)/)), [])
+          .include?(Integer(String(passport['hgt'].match(/\d+/))))
+      end
   end
 end
 
-height_rules = {'cm' => (150..193), 'in' => (59..76)}
-valid_passports_2 = valid_passports_1.select do |passport|
-  height_unit = passport['hgt'].to_s.match(/(cm|in)/).to_s
-  (1920..2002).include?(passport['byr'].to_i) &&
-    (2010..2020).include?(passport['iyr'].to_i) &&
-    (2020..2030).include?(passport['eyr'].to_i) &&
-    !height_unit.nil? && !height_rules[height_unit].nil? &&
-    height_rules[height_unit].include?(passport['hgt'].to_i) &&
-    ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'].include?(passport['ecl']) &&
-    passport['pid'].to_s.match(/^[0-9]{9}$/) &&
-    passport['hcl'].to_s.match(/^#[0-9a-f]{6}$/)
-end
-
-puts "valid_passports(part1): #{valid_passports_1.count}"
-puts "valid_passports(part2): #{valid_passports_2.count}"
+solver = PassportProcessing.new
+puts "PART I: #{solver.part1}"
+puts "PART II: #{solver.part2}"

@@ -1,5 +1,4 @@
 require 'matrix'
-require 'pry'
 
 class Board
   attr_accessor :grid, :marked
@@ -62,7 +61,7 @@ class GiantSquid
       break if p1boards.any? { _1.won? }
     end
 
-    winning_board = p1boards.find(&:won?)&.solve
+    p1boards.find(&:won?)&.solve
   end
 
   def part2
@@ -70,13 +69,11 @@ class GiantSquid
     emulate(p2boards, p2nums)[-1]&.solve
   end
 
-  def emulate(b, i, w = [])
-    return w if b.empty? || i.empty?
+  def emulate(boards, nums, wboards = [])
+    return wboards if boards.empty? || nums.empty?
 
-    next_call = i.shift
-    b.each { |board| board.mark(next_call) }
-    w += b.select(&:won?)
-    emulate(b.reject(&:won?), i, w)
+    boards.each { |board| board.mark(nums[0]) }
+    emulate(boards.reject(&:won?), nums.tap(&:shift), wboards + boards.select(&:won?))
   end
 end
 

@@ -19,8 +19,7 @@ class Board
   end
 
   def won?
-    @grid.row_vectors.any? {|row| row.all? {|el| el[1] } } || 
-    @grid.column_vectors.any? {|col| col.all? {|el| el[1] } }
+    @grid.row_vectors.any? { _1.all?(&:last) } || @grid.column_vectors.any? { _1.all?(&:last) }
   end
 
   def solve

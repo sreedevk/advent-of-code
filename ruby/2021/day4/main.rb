@@ -54,26 +54,25 @@ class GiantSquid
   end
 
   def part1
-    p1nums, p1boards = parse_data(data)
+    emulatep1(*parse_data(data))&.solve
+  end
 
-    p1nums.each do |num|
-      p1boards.each { |board| board.mark(num) }
-      break if p1boards.any? { _1.won? }
-    end
+  def emulatep1(nums, boards)
+    return boards.find(&:won?) if boards.any?(&:won?) || nums.empty?
 
-    p1boards.find(&:won?)&.solve
+    boards.each { |board| board.mark(nums[0]) }
+    emulatep1(nums.tap(&:shift), boards)
   end
 
   def part2
-    p2nums, p2boards = parse_data(data)
-    emulate(p2boards, p2nums)[-1]&.solve
+    emulatep2(*parse_data(data))[-1]&.solve
   end
 
-  def emulate(boards, nums, wboards = [])
+  def emulatep2(nums, boards, wboards = [])
     return wboards if boards.empty? || nums.empty?
 
     boards.each { |board| board.mark(nums[0]) }
-    emulate(boards.reject(&:won?), nums.tap(&:shift), wboards + boards.select(&:won?))
+    emulatep2(nums.tap(&:shift), boards.reject(&:won?), wboards + boards.select(&:won?))
   end
 end
 

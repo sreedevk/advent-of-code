@@ -1,0 +1,33 @@
+require_relative './aoc'
+require 'pry'
+
+namespace :aoc do
+  desc "Set Cookie for your AOC Account Copied from the browser"
+  task :auth, [:cookie] do |t, args|
+    AOC.auth(args[:cookie])
+  end
+
+  desc "Run Solution"
+  task :run, [:year, :day] do |t, args|
+    sh("ruby ./#{args[:year]}/day#{args[:day]}/main.rb ./#{args[:year]}/day#{args[:day]}/data.txt")
+  end
+
+  desc "fetch templates"
+  task :init, [:year, :day] do |t, args|
+    AOC.new(args[:year], args[:day])
+  end
+
+  desc "help"
+  task :help do
+    puts <<-SPLASH
+
+     █████  ██████  ██    ██ ███████ ███    ██ ████████      ██████  ███████      ██████  ██████  ██████  ███████ 
+    ██   ██ ██   ██ ██    ██ ██      ████   ██    ██        ██    ██ ██          ██      ██    ██ ██   ██ ██      
+    ███████ ██   ██ ██    ██ █████   ██ ██  ██    ██        ██    ██ █████       ██      ██    ██ ██   ██ █████   
+    ██   ██ ██   ██  ██  ██  ██      ██  ██ ██    ██        ██    ██ ██          ██      ██    ██ ██   ██ ██      
+    ██   ██ ██████    ████   ███████ ██   ████    ██         ██████  ██           ██████  ██████  ██████  ███████
+
+    SPLASH
+    sh("rake -T")
+  end
+end

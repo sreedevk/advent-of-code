@@ -1,10 +1,8 @@
 # frozen_string_literal: true
-
 require 'faraday'
 require 'fileutils'
 require 'nokogiri'
 require 'ostruct'
-require 'colorize'
 
 # template for a problem
 class AOC
@@ -21,61 +19,20 @@ class AOC
 
   attr_accessor :problem
 
-  def self.usage
-    puts splash.colorize(:blue)
-    puts 'Usage:'.colorize(:red)
-    commands.map do |command_usage|
-      puts command_usage[0].colorize(:yellow)
-      puts command_usage[1].colorize(:green)
-      puts
-    end
-  end
-
-  def self.commands
-    [
-      ['Fetch a problem & create files in ./<year>/<day>/', 'aoc new <year(default: current_year)> <day(default: today)>'],
-      ['Set Cookie for your AOC Account Copied from the browser', 'aoc auth <cookie>'],
-      ['Run solution `main.rb` using the data.txt as ARGF', 'cd <problem_path> && aoc run'],
-      ['Run solution `main.rb` using the example.txt as ARGF', 'cd <problem_path> && aoc run example']
-    ]
-  end
-
-  def self.auth
+  def self.auth(cookie)
     File.open(File.join(APP_ROOT, '.cookie'), 'w+') do |cf|
-      cf.puts ARGV[1]
+      cf.puts cookie
     end
   end
 
-  def self.run
-    puts system(
-      <<-SH
-        ruby\
-        #{File.join(Dir.pwd.to_s, CONFIG[:files][:solution_file])}\
-        #{File.join(Dir.pwd.to_s, CONFIG[:files][:"#{ARGV[1] || 'data'}_file"])}
-      SH
-    )
-  end
-
-  def initialize
-    load_template
-  end
-
-  def self.splash
-    <<-SPLASH
-
-       █████  ██████  ██    ██ ███████ ███    ██ ████████      ██████  ███████      ██████  ██████  ██████  ███████ 
-      ██   ██ ██   ██ ██    ██ ██      ████   ██    ██        ██    ██ ██          ██      ██    ██ ██   ██ ██      
-      ███████ ██   ██ ██    ██ █████   ██ ██  ██    ██        ██    ██ █████       ██      ██    ██ ██   ██ █████   
-      ██   ██ ██   ██  ██  ██  ██      ██  ██ ██    ██        ██    ██ ██          ██      ██    ██ ██   ██ ██      
-      ██   ██ ██████    ████   ███████ ██   ████    ██         ██████  ██           ██████  ██████  ██████  ███████
-
-    SPLASH
+  def initialize(year, day)
+    load_template(year, day)
   end
 
   private
 
-  def load_template
-    set_time_records
+  def load_template(year, day)
+    set_time_records(year, day)
     create_files
     fetch_problem
     parse_problem
@@ -84,13 +41,13 @@ class AOC
     close_files
   end
 
-  def set_time_records
-    @year = ARGV[1] || Time.now.year.to_s
-    @day  = ARGV[2] || Time.now.day.to_s
+  def set_time_records(year_input = nil, day_input = nil)
+    @year = year_input || Time.now.year.to_s
+    @day  = day_input || Time.now.day.to_s
   end
 
   def create_files
-    @problem_dir = File.join(APP_ROOT, '..', @year, "day#{@day}")
+    @problem_dir = File.join(APP_ROOT, @year, "day#{@day}")
     FileUtils.mkdir_p(@problem_dir)
     CONFIG[:files].map do |file_type, file_name|
       instance_variable_set(
@@ -200,5 +157,3 @@ class AOC
     "/#{@year}/day/#{@day}"
   end
 end
-
-AOC.send(ARGV[0] || :usage)

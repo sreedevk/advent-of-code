@@ -16,6 +16,12 @@ defmodule Mix.Tasks.Aoc do
         Cookie: "session=#{File.read!(".cookie")}"
       ]).body
     )
+
+    File.mkdir_p!("lib/twenty#{year}")
+    File.write!(
+      "lib/twenty#{year}/day#{day}.ex", 
+      String.replace(String.replace(File.read!("templates/solution.ex"), "{{year}}", year), "{{day}}", day)
+    )
   end
 
   @impl Mix.Task

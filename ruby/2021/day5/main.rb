@@ -1,5 +1,4 @@
 require 'pry'
-
 class HydrothermalVenture
   attr_accessor :grid
 
@@ -11,8 +10,8 @@ class HydrothermalVenture
     data
       .filter { |line| line[0].zip(line[1]).any? { _1.min == _1.max } }
       .reduce(@grid) { |grid, line|
-        xs, ys = line[0].zip(line[1]).map(&:sort).map { Range.new(_1, _2) }
-        xs.map { |x| ys.map {|y| grid[[x,y]] += 1 } }
+        xs, ys = line[0].zip(line[1]).map(&:sort).map { Range.new(_1, _2).to_a }
+        xs.product(ys).map { grid[_1] += 1 }
         grid
       }
       .count { _2 >= 2 }

@@ -4,8 +4,8 @@ My AdventOfCode Solutions in Elixir
 
 ## Usage
 ```
-USAGE [AUTH]: mix aoc authenticate <cookie>
-USAGE [INIT FILES]: mix aoc init <year> <day>
-USAGE [SOLVE]: mix aoc solve <YY> <D> [<PART>]
-EXAMPLE [SOLVE]: mix aoc solve 21 1 1
+mix aoc authenticate <cookie>          # add browser cookie for problem fetching from adventofcode.com
+mix aoc init <year> <day>              # setup files + fetch problem for solving
+mix aoc solve <year> <day>             # run part 1 & part 2 solution for year / day
+mix aoc solve <year> <day> <part>      # run part solution for year / day
 ```

@@ -19,7 +19,7 @@ class HydrothermalVenture
   end
 
   def part2
-    data
+    # data
   end
 
   def data

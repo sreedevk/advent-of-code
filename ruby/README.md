@@ -10,5 +10,5 @@ rake aoc:init[year,day]       # fetch templates
 rake aoc:run[year,day]        # Run Solution
 
 * year format = YYYY
-* day  format = DD
+* day  format = D
 ```

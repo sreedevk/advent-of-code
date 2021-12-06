@@ -37,6 +37,25 @@ defmodule Mix.Tasks.Aoc do
   end
 
   @impl Mix.Task
+  def run(["benchmark", year, day, part]) do
+    Benchee.run(
+      %{
+        "YEAR: #{year}| DAY: #{day} | PART: #{part}" => fn -> Aoc.solve([year, day, String.to_integer(part)]) end
+      }
+    )
+  end
+
+  @impl Mix.Task
+  def run(["benchmark", year, day]) do
+    Benchee.run(
+      %{
+        "YEAR: #{year}| DAY: #{day} | PART: 1" => fn -> Aoc.solve([year, day, 1]) end,
+        "YEAR: #{year}| DAY: #{day} | PART: 2" => fn -> Aoc.solve([year, day, 2]) end
+      }
+    )
+  end
+
+  @impl Mix.Task
   def run(_) do
     IO.puts("INVALID ARGS!")
     IO.puts("USAGE   [AUTH]: mix aoc authenticate <cookie>")

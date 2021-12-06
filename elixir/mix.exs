@@ -19,7 +19,8 @@ defmodule Aoc.MixProject do
 
   defp deps do
     [
-      {:httpoison, "~> 1.8"}
+      {:httpoison, "~> 1.8"},
+      {:benchee, "~> 1.0", only: :dev}
     ]
   end
 end

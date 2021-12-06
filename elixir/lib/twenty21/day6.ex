@@ -1,25 +1,24 @@
 defmodule Aoc.Twenty21.Day6 do
   def solve(1) do
-    Enum.count(advance(data(), 80))
+    Enum.sum(Map.values(emulate(Enum.frequencies(data()), 80)))
   end
 
   def solve(2) do
-    Enum.count(advance(data(), 256))
+    Enum.sum(Map.values(emulate(Enum.frequencies(data()), 256)))
   end
 
-  def advance(fishes, days, day \\ 0) do
-    if day < days do
-      fishes
-      |> Enum.map(&process_fish/1)
-      |> List.flatten()
-      |> advance(days, day + 1)
-    else
-      fishes
-    end
+  def emulate(fishes, days, day \\ 1) do
+    if day >= days, do: next_gen(fishes), else: emulate(next_gen(fishes), days, day + 1)
   end
 
-  defp process_fish(0), do: [6, 8]
-  defp process_fish(x), do: x - 1
+  def next_gen(fishes) do
+       Map.merge(
+         %{ 6 => Map.get(fishes, 0, 0), 8 => Map.get(fishes, 0, 0) },
+         Map.new(
+           Enum.filter(fishes, fn {k, _v} -> k > 0 end),
+           fn {fp, count} -> {fp - 1, count} end), fn _k, v1, v2 -> v1 + v2 end
+       )
+  end
 
   def data do
     Aoc.Utils.Data.read!(__MODULE__)

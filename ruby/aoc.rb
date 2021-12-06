@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'faraday'
-require 'fileutils'
 require 'nokogiri'
+require 'fileutils'
 require 'ostruct'
 
 # template for a problem

@@ -1,25 +1,25 @@
 defmodule Aoc.Twenty21.Day6 do
   def solve(1) do
-    Enum.count(advance(data()))
+    Enum.count(advance(data(), 80))
   end
 
-  def solve(2), do: :unsolved
+  def solve(2) do
+    Enum.count(advance(data(), 256))
+  end
 
-  def advance(fishes, day \\ 0) do
-    if day < 80 do
+  def advance(fishes, days, day \\ 0) do
+    if day < days do
       fishes
-      |> Enum.map(fn fish ->
-        case fish do
-          0 -> [6, 8]
-          points -> points - 1
-        end
-      end)
+      |> Enum.map(&process_fish/1)
       |> List.flatten()
-      |> advance(day + 1)
+      |> advance(days, day + 1)
     else
       fishes
     end
   end
+
+  defp process_fish(0), do: [6, 8]
+  defp process_fish(x), do: x - 1
 
   def data do
     Aoc.Utils.Data.read!(__MODULE__)

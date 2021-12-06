@@ -39,9 +39,9 @@ defmodule Mix.Tasks.Aoc do
   @impl Mix.Task
   def run(_) do
     IO.puts("INVALID ARGS!")
-    IO.puts("USAGE [AUTH]: mix aoc authenticate <cookie>")
-    IO.puts("USAGE [INIT FILES]: mix aoc init <year> <day>")
-    IO.puts("USAGE [SOLVE]: mix aoc solve <YY> <D> [<PART>]")
+    IO.puts("USAGE   [AUTH]: mix aoc authenticate <cookie>")
+    IO.puts("USAGE   [INIT FILES]: mix aoc init <year> <day>")
+    IO.puts("USAGE   [SOLVE]: mix aoc solve <YY> <D> [<PART>]")
     IO.puts("EXAMPLE [SOLVE]: mix aoc solve 21 1 1")
   end
 end

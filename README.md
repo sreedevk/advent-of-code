@@ -20,6 +20,7 @@
     ├─ day01
     ├─ day02
     ├─ day03 (PART I)
+    ├─ day06
 ```
 #### Ruby
 
@@ -46,4 +47,5 @@
     ├─ day1
     ├─ day3 (PART II)
     ├─ day4
+    ├─ day5
 ```

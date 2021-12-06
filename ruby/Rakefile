@@ -1,5 +1,6 @@
 require_relative './aoc'
 require 'pry'
+require 'benchmark'
 
 namespace :aoc do
   desc "Set Cookie for your AOC Account Copied from the browser"
@@ -10,6 +11,15 @@ namespace :aoc do
   desc "Run Solution"
   task :run, [:year, :day] do |t, args|
     sh("ruby ./#{args[:year]}/day#{args[:day]}/main.rb ./#{args[:year]}/day#{args[:day]}/data.txt")
+  end
+
+  desc "Benchmark Solution"
+  task :benchmark, [:year, :day] do |t, args|
+    puts Benchmark.measure {
+      100.times do
+        sh("ruby ./#{args[:year]}/day#{args[:day]}/main.rb ./#{args[:year]}/day#{args[:day]}/data.txt")
+      end
+    }
   end
 
   desc "fetch templates"

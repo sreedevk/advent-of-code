@@ -41,7 +41,8 @@ defmodule Mix.Tasks.Aoc do
     Benchee.run(
       %{
         "YEAR: #{year}| DAY: #{day} | PART: #{part}" => fn -> Aoc.solve([year, day, String.to_integer(part)]) end
-      }
+      },
+      parallel: 8
     )
   end
 
@@ -51,7 +52,8 @@ defmodule Mix.Tasks.Aoc do
       %{
         "YEAR: #{year}| DAY: #{day} | PART: 1" => fn -> Aoc.solve([year, day, 1]) end,
         "YEAR: #{year}| DAY: #{day} | PART: 2" => fn -> Aoc.solve([year, day, 2]) end
-      }
+      },
+      parallel: 8
     )
   end
 

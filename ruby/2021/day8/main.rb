@@ -63,13 +63,11 @@ class SevenSegmentSearch
   end
 
   def map_known_numbers(signals)
-    signals.inject({}) do |memory, signal|
-      if SEG_COUNT_NUMS[signal.length].length == 1
+    signals
+      .filter { SEG_COUNT_NUMS[_1.length].length == 1 }
+      .inject({}) do |memory, signal|
         memory.merge({ SEG_COUNT_NUMS[signal.length][0] => signal })
-      else
-        memory
       end
-    end
   end
 
   def data

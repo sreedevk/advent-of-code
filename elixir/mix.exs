@@ -20,7 +20,10 @@ defmodule Aoc.MixProject do
   defp deps do
     [
       {:httpoison, "~> 1.8"},
-      {:benchee, "~> 1.0", only: :dev}
+      {:benchee, "~> 1.0", only: :dev},
+      {:benchee_html, "~> 1.0", only: :dev},
+      {:nx, "~> 0.1.0-dev", github: "elixir-nx/nx", branch: "main", sparse: "nx"},
+      {:flow, "~> 1.0"}
     ]
   end
 end

@@ -27,13 +27,13 @@ defmodule Mix.Tasks.Aoc do
   @impl Mix.Task
   def run(["solve", year, day]) do
     IO.puts "Solving Year #{year} Day #{day}"
-    IO.puts("PART 1: #{Aoc.solve([year, day, 1])}")
-    IO.puts("PART 2: #{Aoc.solve([year, day, 2])}")
+    IO.inspect(Aoc.solve([year, day, 1]), label: "PART 1")
+    IO.inspect(Aoc.solve([year, day, 2]), label: "PART 2")
   end
 
   @impl Mix.Task
   def run(["solve", year, day, part]) do
-    IO.puts("PART #{part}: #{Aoc.solve([year, day, String.to_integer(part)])}")
+    IO.inspect(Aoc.solve([year, day, String.to_integer(part)]), label: "PART #{part}")
   end
 
   @impl Mix.Task
@@ -42,7 +42,11 @@ defmodule Mix.Tasks.Aoc do
       %{
         "YEAR: #{year}| DAY: #{day} | PART: #{part}" => fn -> Aoc.solve([year, day, String.to_integer(part)]) end
       },
-      parallel: 8
+      parallel: 8,
+      formatters: [
+        { Benchee.Formatters.Console, extended_statistics: true },
+        { Benchee.Formatters.HTML, file: "benchmarks/year_#{year}_day__#{day}.html" }
+      ]
     )
   end
 
@@ -53,7 +57,11 @@ defmodule Mix.Tasks.Aoc do
         "YEAR: #{year}| DAY: #{day} | PART: 1" => fn -> Aoc.solve([year, day, 1]) end,
         "YEAR: #{year}| DAY: #{day} | PART: 2" => fn -> Aoc.solve([year, day, 2]) end
       },
-      parallel: 8
+      parallel: 8,
+      formatters: [
+        { Benchee.Formatters.Console, extended_statistics: true },
+        { Benchee.Formatters.HTML, file: "benchmarks/year_#{year}_day__#{day}.html" }
+      ]
     )
   end
 

@@ -1,4 +1,4 @@
-require 'pry'
+require 'set'
 
 class SevenSegmentSearch
   # length => numbers
@@ -25,7 +25,7 @@ class SevenSegmentSearch
   end
 
   def deduce_signal_map(signals)
-    unpacked_signals  = signals.map(&:chars)
+    unpacked_signals  = Set[*signals.map(&:chars)]
     signals_map       = map_known_numbers(unpacked_signals)
     ambi_signals      = unpacked_signals.filter { SEG_COUNT_NUMS[_1.length].length > 1 }
 

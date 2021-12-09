@@ -1,14 +1,28 @@
+require 'set'
+
 class SmokeBasin
   def part1
     lowpoints.map(&:next).sum
   end
 
-  def scan_low_points(mapdat)
-    mapdat.map.with_index do |row, y|
-      row.map.with_index do |point, x|
-        [point, point < neighboring_indices(x, y).map { terrain.dig(*_1.reverse) }.compact.min ]
-      end
+  def part2
+    lowpoint_indices.inject(Set[]) { |basins, lowpoint_index| basins.add(scan_recurse(lowpoint_index, Set[lowpoint_index]).size) }
+      .max(3)
+      .inject(&:*)
+  end
+
+  def scan_recurse(lowpoint_index, basin_nodes)
+    scannable_neighboring_indices = neighboring_indices(*lowpoint_index).reject do |node|
+      basin_nodes.member?(node) || basin_end?(terrain.dig(*node.reverse))
     end
+
+    return basin_nodes if scannable_neighboring_indices.none?
+
+    scannable_neighboring_indices.reduce(Set[]) { |nodes, lpindx| nodes.merge(scan_recurse(lpindx, basin_nodes.add(lpindx))) }
+  end
+
+  def basin_end?(basin_height)
+    basin_height > 8
   end
 
   def lowpoints
@@ -33,6 +47,12 @@ class SmokeBasin
     @terrain ||= ARGF.readlines.map { _1.strip.split('').map(&:to_i) }
   end
 
+  def terrain_neighbor_index_map
+    @terrain_neighbor_index_map ||= [*0..terrain_xmax].product([*0..terrain_ymax]).inject({}) do |tmap, (x, y)|
+      tmap.merge([x, y] => neighboring_indices(x, y))
+    end
+  end
+
   def terrain_xmax
     @terrain_xmax ||= terrain[0].length.pred
   end
@@ -48,4 +68,4 @@ end
 
 solver = SmokeBasin.new
 pp solver.part1
-# pp solver.part2
+pp solver.part2

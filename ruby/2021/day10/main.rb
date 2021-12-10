@@ -5,6 +5,10 @@ class SyntaxScoring
   CTOKEN      = TOKENGROUPS.map(&:max)
   POINTS      = CTOKEN.zip([3, 57, 1197, 25137]).to_a.to_h
 
+  def initialize
+    data
+  end
+
   def part1
     data
       .filter { _1[:type].eql?(:invalid) }
@@ -47,5 +51,7 @@ class SyntaxScoring
 end
 
 solver = SyntaxScoring.new
-pp solver.part1
-pp solver.part2
+
+Process.fork { pp solver.part1 }
+Process.fork { pp solver.part2 }
+Process.waitall

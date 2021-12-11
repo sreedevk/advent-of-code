@@ -15,12 +15,12 @@ class SyntaxScoring
   end
 
   def part2
-    scores = data
-      .select    { _1[:type].eql?(:incomplete) }
-      .map       { _1[:callstack].reverse.reduce(0) { |acc, token| (acc * 5) + @otokens.index(token).next } }
-      .sort
-
-    scores[scores.count/2]
+    scores = data.filter_map do |line|
+      line[:type].eql?(:incomplete) &&
+        line[:callstack].reverse.reduce(0) { |acc, token| (acc * 5) + @otokens.index(token).next }
+    end
+        
+    scores.sort[scores.count/2]
   end
 
   private
@@ -44,7 +44,6 @@ class SyntaxScoring
 end
 
 solver = SyntaxScoring.new
-
 Process.fork { pp solver.part1 }
 Process.fork { pp solver.part2 }
 Process.waitall

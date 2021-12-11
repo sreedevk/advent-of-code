@@ -14,7 +14,7 @@ namespace :aoc do
 
   desc "Benchmark Solution"
   task :benchmark, [:year, :day] do |t, args|
-    sh("hyperfine \"ruby ./#{args[:year]}/day#{args[:day]}/main.rb ./#{args[:year]}/day#{args[:day]}/data.txt\"")
+    sh("hyperfine \"ruby ./#{args[:year]}/day#{args[:day]}/main.rb ./#{args[:year]}/day#{args[:day]}/data.txt\" --warmup 3")
   end
 
   desc "fetch templates"

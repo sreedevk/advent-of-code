@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'set'
 require 'matrix'
 
@@ -9,9 +11,9 @@ class TransparentOrigami
   def part2
     dotmatrix = foldspec.reduce(dotspec) { |acc, line| fold(acc, line) }.to_set
     Matrix.build(*Matrix[*dotmatrix].column_vectors.map(&:max).map(&:next)) { dotmatrix.member?([_1, _2]) ? '#' : ' ' }
-      .transpose
-      .to_a
-      .map(&:join)
+          .transpose
+          .to_a
+          .map(&:join)
   end
 
   def fold(dots, line)
@@ -26,11 +28,11 @@ class TransparentOrigami
   end
 
   def dotspec
-    @dotspec ||= data[0].split("\n").map { _1.split(",").map(&:strip).map(&:to_i) }
+    @dotspec ||= data[0].split("\n").map { _1.split(',').map(&:strip).map(&:to_i) }
   end
 
   def foldspec
-    @foldspec ||= data[1].split("\n").map { _1.split(" ").last.split("=") }.map do |spec|
+    @foldspec ||= data[1].split("\n").map { _1.split(' ').last.split('=') }.map do |spec|
       spec[0] == 'x' ? [spec[1].to_i, 0] : [0, spec[1].to_i]
     end
   end

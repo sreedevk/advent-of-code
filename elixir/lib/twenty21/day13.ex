@@ -1,7 +1,7 @@
 defmodule Aoc.Twenty21.Day13 do
   require IEx;
   def solve(1) do
-    MapSet.size(fold(dots(data()), List.last(folds(data()))))
+    MapSet.size(fold(dots(data()), List.first(folds(data()))))
   end
 
   def solve(2) do

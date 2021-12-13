@@ -24,7 +24,8 @@ defmodule Aoc.MixProject do
       {:benchee_html, "~> 1.0", only: :dev},
       {:nx, "~> 0.1.0-dev", github: "elixir-nx/nx", branch: "main", sparse: "nx"},
       {:flow, "~> 1.0"},
-      {:libcluster, "~> 3.3"}
+      {:libcluster, "~> 3.3"},
+      {:libgraph, "~> 0.7"}
     ]
   end
 end

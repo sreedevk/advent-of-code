@@ -1,5 +1,4 @@
 defmodule Aoc.Twenty21.Day13 do
-  require IEx;
   def solve(1) do
     MapSet.size(fold(dots(data()), List.first(folds(data()))))
   end

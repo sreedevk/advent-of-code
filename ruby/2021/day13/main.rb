@@ -6,6 +6,14 @@ class TransparentOrigami
     fold(dotspec, foldspec[0]).size
   end
 
+  def part2
+    dotmatrix = foldspec.reduce(dotspec) { |acc, line| fold(acc, line) }.to_set
+    Matrix.build(*Matrix[*dotmatrix].column_vectors.map(&:max).map(&:next)) { dotmatrix.member?([_1, _2]) ? '#' : ' ' }
+      .transpose
+      .to_a
+      .map(&:join)
+  end
+
   def fold(dots, line)
     dots.reduce(Set[]) do |acc, (x, y)|
       acc.add(
@@ -15,14 +23,6 @@ class TransparentOrigami
         ]
       )
     end
-  end
-
-  def part2
-    dotmatrix = foldspec.reduce(dotspec) { |acc, line| fold(acc, line) }.to_set
-    xmax, ymax = Matrix[*dotmatrix].column_vectors.map(&:max).map(&:next)
-    Matrix.build(xmax, ymax) do |x, y|
-      dotmatrix.member?([x, y]) ? "#" : " "
-    end.transpose.to_a.map(&:join)
   end
 
   def dotspec

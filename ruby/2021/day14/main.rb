@@ -26,17 +26,13 @@ class ExtendedPolymerization
   end
 
   def combination_mutation_rules
-    @combination_mutation_rules ||= mutation_rules.inject({}) do |acc, (combination, insertion_variant)|
+    @combination_mutation_rules ||= data[1].split("\n").map { _1.strip.split(" -> ") }.inject({}) do |acc, (combination, insertion_variant)|
       acc.merge(combination => combination.chars.insert(1, insertion_variant).each_cons(2).to_a.map(&:join))
     end
   end
 
   def initial_state
     @initial_state ||= data[0].strip
-  end
-
-  def mutation_rules
-    @mutation_rules ||= data[1].split("\n").map { _1.strip.split(" -> ") }.to_h
   end
 
   def data

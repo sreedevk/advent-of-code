@@ -13,5 +13,4 @@
     (let [solver (find-ns solns)]
     (println "PART I  (Alpha):"(apply (ns-resolve solver 'alpha) []))
     (println "PART II (Beta):" (apply (ns-resolve solver 'beta) [])))
-    (catch Exception e (AdventHelp)))
-  )
+    (catch Exception e (AdventHelp))))

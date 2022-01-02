@@ -11,5 +11,3 @@ $ lein run -year- -day-
 ``` sh
 $ lein run 2021 1
 ```
-
-...

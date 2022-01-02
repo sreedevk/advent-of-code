@@ -1,11 +1,19 @@
 (ns advent.y2021.day1)
 
-(defn alpha []
+(defn data []
   (->> (clojure.string/split (slurp "./resources/data/day1.txt")  #"\n")
-       (map #(Integer/parseInt %))
+       (map #(Integer/parseInt %))))
+
+(defn alpha []
+  (->> (data)
        (partition 2 1)
        (filter #(apply < %))
        (count)))
 
 (defn beta []
-  :unsolved)
+  (->> (data)
+       (partition 3 1)
+       (map #(apply + %))
+       (partition 2 1)
+       (filter #(apply < %))
+       (count)))

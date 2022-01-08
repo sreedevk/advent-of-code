@@ -16,8 +16,8 @@
         (do
           (criterium.core/with-progress-reporting (criterium.core/quick-bench (apply (ns-resolve solver 'alpha) []) :verbose))
           (criterium.core/with-progress-reporting (criterium.core/quick-bench (apply (ns-resolve solver 'beta) []) :verbose)))
-        (do (println "PART I  (Alpha):" (apply (ns-resolve solver 'alpha) []))
-            (println "PART II (Beta):" (apply (ns-resolve solver 'beta) [])))))
+        (do (println "\nPART I  (Alpha):\n" (apply (ns-resolve solver 'alpha) []))
+            (println "\nPART II (Beta):\n" (apply (ns-resolve solver 'beta) [])))))
     (catch Exception e 
       (do (println e)
           (AdventHelp)))))

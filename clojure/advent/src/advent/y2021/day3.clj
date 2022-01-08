@@ -24,7 +24,7 @@
            (vec)                                ;; converts the seq to vec
            (map frequencies)                    ;; generates frequencies of elements in the inner vector
            (map clojure.set/map-invert)         ;; inverts the freq map
-           (map #(get % (apply min (keys %))))  ;; gets the mode
+           (map #(get % (apply min (keys %))))  ;; gets the antimode
            (clojure.string/join))
       (Integer/parseInt 2)))
 

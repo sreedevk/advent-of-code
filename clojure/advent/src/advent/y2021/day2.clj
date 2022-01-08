@@ -1,6 +1,10 @@
 (ns advent.y2021.day2
   (:require clojure.string))
 
+(defn data []
+  (->> (clojure.string/split (slurp "./resources/data/2021/day2.txt")  #"\n")
+       (map #(clojure.string/split % #" "))))
+
 (defn ingest-instruction [state [pos mag]]
   (case pos
     "up" (assoc state :depth (- (:depth state) (Integer. mag)))
@@ -13,9 +17,6 @@
     "up" (assoc state :aim (- (:aim state) (Integer. mag)))
     "forward" (-> (assoc state :horizontal (+ (:horizontal state) (Integer. mag)))
                   (assoc :depth (+ (:depth state) (* (Integer. mag) (:aim state)))))))
-(defn data []
-  (->> (clojure.string/split (slurp "./resources/data/day2.txt")  #"\n")
-       (map #(clojure.string/split % #" "))))
 
 (defn alpha []
   (->>

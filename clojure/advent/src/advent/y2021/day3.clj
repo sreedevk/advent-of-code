@@ -3,7 +3,7 @@
   (:require clojure.set))
 
 (defn data []
-  (-> (slurp "./resources/data/day3.txt")
+  (-> (slurp "./resources/data/2021/day3.txt")
       (clojure.string/split #"\n")))
 
 (defn gamma-rate []

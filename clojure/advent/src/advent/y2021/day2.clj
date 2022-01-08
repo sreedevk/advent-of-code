@@ -1,15 +1,30 @@
 (ns advent.y2021.day2
   (:require clojure.string))
 
-(defn ingest-instruction [state instruction]
-  (case state
-    "up" (assoc state :depth (- (:depth state) (int (last instruction))))
-    "down" (assoc state :depth (+ (:depth state) (int (last instruction))))
-    "forward" (assoc state :depth (+ (:horizontal state) (int (last instruction))))))
+(defn ingest-instruction [state [pos mag]]
+  (case pos
+    "up" (assoc state :depth (- (:depth state) (Integer. mag)))
+    "down" (assoc state :depth (+ (:depth state) (Integer. mag)))
+    "forward" (assoc state :horizontal (+ (:horizontal state) (Integer. mag)))))
 
+(defn ingest-projectile-instruction [state [pos mag]]
+  (case pos
+    "down" (assoc state :aim (+ (:aim state) (Integer. mag)))
+    "up" (assoc state :aim (- (:aim state) (Integer. mag)))
+    "forward" (-> (assoc state :horizontal (+ (:horizontal state) (Integer. mag)))
+                  (assoc :depth (+ (:depth state) (* (Integer. mag) (:aim state)))))))
 (defn data []
   (->> (clojure.string/split (slurp "./resources/data/day2.txt")  #"\n")
        (map #(clojure.string/split % #" "))))
 
-(defn alpha [] (reduce ingest-instruction {:depth 0, :horizontal 0} (data)))
-(defn beta  [] 'unsolved)
+(defn alpha []
+  (->>
+    (reduce ingest-instruction {:depth 0, :horizontal 0} (data))
+    (vals)
+    (reduce *)))
+
+(defn beta [] 
+  (reduce *
+    (-> (reduce ingest-projectile-instruction {:depth 0, :horizontal 0, :aim 0} (data))
+        (select-keys [:depth :horizontal])
+        (vals))))

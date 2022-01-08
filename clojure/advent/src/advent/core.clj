@@ -1,4 +1,5 @@
 (ns advent.core
+  (:require criterium.core)
   (:gen-class))
 
 (defn AdventHelp []
@@ -6,13 +7,17 @@
   (println "USAGE:" "lein run <year> <day>")
   (println "EXAMPLE:" "lein run 2021 1"))
 
-(defn -main [& args]
+(defn -main [year day & args]
   (try
-    (def solns (symbol (str "advent.y" (first args) \. "day" (last args))))
+    (def solns (symbol (str "advent.y" year \. "day" day)))
     (require solns)
     (let [solver (find-ns solns)]
-      (println "PART I  (Alpha):"(apply (ns-resolve solver 'alpha) []))
-      (println "PART II (Beta):" (apply (ns-resolve solver 'beta) [])))
+      (if (.contains (vec args) "benchmark")
+        (do
+          (criterium.core/with-progress-reporting (criterium.core/quick-bench (apply (ns-resolve solver 'alpha) []) :verbose))
+          (criterium.core/with-progress-reporting (criterium.core/quick-bench (apply (ns-resolve solver 'beta) []) :verbose)))
+        (do (println "PART I  (Alpha):" (apply (ns-resolve solver 'alpha) []))
+            (println "PART II (Beta):" (apply (ns-resolve solver 'beta) [])))))
     (catch Exception e 
       (do (println e)
           (AdventHelp)))))

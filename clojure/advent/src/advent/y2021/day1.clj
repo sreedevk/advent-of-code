@@ -17,7 +17,3 @@
        (partition 2 1)
        (filter #(apply < %))
        (count)))
-
-(do
-  (->> (+ 1 1 1 1)
-       (println)))

@@ -5,7 +5,8 @@
             :url "mit"}
   :dependencies [[org.clojure/clojure "1.10.3"]
                  [nrepl/nrepl "0.7.0"]
-                 [cider/cider-nrepl "0.25.2"]]
+                 [cider/cider-nrepl "0.25.2"]
+                 [criterium "0.4.6"]]
   :main ^:skip-aot advent.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all

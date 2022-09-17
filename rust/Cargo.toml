@@ -1,0 +1,4 @@
+[workspace]
+members = ["runner", "common", "solutions-2021"]
+exclude = ["data"]
+default-members = ["runner"]

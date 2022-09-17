@@ -1,8 +1,9 @@
-pub struct Problem;
+pub struct Part1;
+
 struct Submarine { y: i32, x: i32 }
 struct Instruction { x: i32, y: i32 }
 
-impl Problem {
+impl Part1 {
     fn process(sub: &Submarine, instruction: &Instruction) -> Submarine {
         Submarine { x: sub.x + instruction.x, y: sub.y + instruction.y }
     }
@@ -19,10 +20,10 @@ impl Problem {
     pub fn solve(raw_data: &str) -> i32 {
         let sub = raw_data
             .split("\n")
-            .map(|input| Problem::geninst(input) )
+            .map(|input| Part1::geninst(input) )
             .collect::<Vec<Instruction>>()
             .into_iter()
-            .fold(Submarine { y: 0, x: 0 }, |acc, isq| Problem::process(&acc, &isq) );
+            .fold(Submarine { y: 0, x: 0 }, |acc, isq| Part1::process(&acc, &isq) );
 
         sub.x * sub.y
     }

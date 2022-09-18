@@ -15,12 +15,12 @@ impl Day2 {
     }
 
     fn solve1() -> String {
-        let solution = Part1::solve(FileManager::read("data/main/2021/day2.txt").as_str());
+        let solution = Part1::solve(file_manager::read("data/main/2021/day2.txt").as_str());
         return String::from(format!("{}", solution));
     }
 
     fn solve2() -> String {
-        let solution = Part2::solve(FileManager::read("data/main/2021/day2.txt").as_str());
+        let solution = Part2::solve(file_manager::read("data/main/2021/day2.txt").as_str());
         return String::from(format!("{}", solution));
     }
 }

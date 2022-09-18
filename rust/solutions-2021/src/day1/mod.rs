@@ -10,7 +10,7 @@ impl Day1 {
     }
 
     fn solve1() -> String {
-        let solution = FileManager::readlines("data/main/2021/day1.txt")
+        let solution = file_manager::readlines("data/main/2021/day1.txt")
             .into_iter()
             .map(|input| input.parse().unwrap() )
             .collect::<Vec<i32>>()
@@ -24,7 +24,7 @@ impl Day1 {
     }
 
     fn solve2() -> String {
-        let solution = FileManager::readlines("data/main/2021/day1.txt")
+        let solution = file_manager::readlines("data/main/2021/day1.txt")
             .into_iter()
             .map(|input| input.parse().unwrap() )
             .collect::<Vec<i32>>()

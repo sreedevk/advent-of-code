@@ -7,4 +7,6 @@ edition = "2021"
 
 [dependencies]
 common = { path = "../common" }
+ndarray = "0.15.6"
 solutions-2021 = { path = "../solutions-2021" }
+uint = "0.9.3"

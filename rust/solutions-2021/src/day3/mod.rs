@@ -14,8 +14,12 @@ impl Day3 {
         ]
     }
 
+    fn raw_data() -> Vec<String> {
+        file_manager::readlines("data/main/2021/day3.txt")
+    }
+
     fn processed_data() -> Vec<(usize, usize)> {
-        let input_data: Vec<Vec<char>> = file_manager::readlines("data/main/2021/day3.txt")
+        let input_data: Vec<Vec<char>> = Day3::raw_data()
             .into_iter()
             .map(|x| x.chars().collect::<Vec<char>>() )
             .collect();

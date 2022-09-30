@@ -4,6 +4,14 @@
 
 ### Completed Solutions Map
 
+#### Rust
+```
+ └─ 2021
+    ├─ day01
+    ├─ day02
+    ├─ day03
+```
+
 #### Elixir
 ```
  └─ 2020

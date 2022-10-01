@@ -1,16 +1,23 @@
 require 'matrix'
+require 'pry'
 
 class BinaryDiagnostic
   def data
     @data ||= ARGF.readlines.map(&:strip).map(&:chars).map { _1.map(&:to_i) }
   end
 
-  def part2
-    filter_oxygen(data).join.to_i(2) * filter_carbon(data).join.to_i(2)
+  def part1
+    data
+      .transpose
+      .map(&:reverse)
+      .map { _1.tally.minmax_by(&:last).map(&:first) }
+      .transpose
+      .map { _1.join.to_i(2) }
+      .inject(&:*)
   end
 
-  def gamma_rate(numbers)
-    Matrix[numbers]
+  def part2
+    filter_oxygen(data).join.to_i(2) * filter_carbon(data).join.to_i(2)
   end
 
   def filter_oxygen(numbers, column_index = 0)
@@ -43,5 +50,5 @@ class BinaryDiagnostic
 end
 
 solver = BinaryDiagnostic.new
-puts "PART I: SOLVED IN ELIXIR"
+puts "PART I: #{solver.part1.inspect}"
 puts "PART II: #{solver.part2.inspect}"

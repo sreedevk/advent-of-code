@@ -32,12 +32,8 @@ impl<'a> Expression<'_> {
     }
 
     fn wire_name(value: Value) -> &str {
-        if let Value::Wire(wire) = value {
-            wire
-        }
-        else {
-            "none"
-        }
+        if let Value::Wire(wire) = value { wire }
+        else { "none" }
     }
 
     pub fn eval(&self, circ: Circuit) -> Circuit {

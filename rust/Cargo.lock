@@ -157,6 +157,7 @@ dependencies = [
  "common",
  "ndarray",
  "solutions-2015",
+ "solutions-2018",
  "solutions-2021",
  "uint",
 ]
@@ -166,6 +167,13 @@ name = "solutions-2015"
 version = "0.1.0"
 dependencies = [
  "nom",
+]
+
+[[package]]
+name = "solutions-2018"
+version = "0.1.0"
+dependencies = [
+ "common",
 ]
 
 [[package]]

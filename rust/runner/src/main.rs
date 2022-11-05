@@ -2,9 +2,12 @@ use std::env;
 use solutions_2021;
 use solutions_2015;
 use solutions_2018;
+use std::process::exit;
+use aoc_utils::Aoc;
 
 /* cargo run 2021 1*/
-fn main() {
+#[tokio::main]
+async fn main() {
     let args: Vec<String> = env::args().collect();
     let solution: Option<[String; 2]> = match args[1].as_str() {
         "2021" => {
@@ -19,7 +22,7 @@ fn main() {
         },
         "2018" => {
             match args[2].as_str() {
-                "1" => Some(solutions_2018::day1::Day1::solve()),
+                "3" => Some(solutions_2018::day3::Day3::solve()),
                 _ => None
             }
         },
@@ -29,8 +32,12 @@ fn main() {
                 "7" => { Some(solutions_2015::day7::Day7::solve())}
                 _ => None
             }
+        },
+        "fetch" => {
+            Aoc::fetch(&args[2], &args[3]).await;
+            exit(0)
         }
-        _ => None 
+        _ => None
     };
 
     match solution {

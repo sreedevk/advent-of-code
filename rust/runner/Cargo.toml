@@ -9,7 +9,10 @@ edition = "2021"
 bytes = "1.2.1"
 common = { path = "../common" }
 ndarray = "0.15.6"
+aoc-utils = { path = "../aoc-utils" }
 solutions-2021 = { path = "../solutions-2021" }
 solutions-2015 = { path = "../solutions-2015" }
 solutions-2018 = { path = "../solutions-2018" }
 uint = "0.9.3"
+tokio = { version = "1.21.2", features = ["full"] }
+tl = "0.7.7"

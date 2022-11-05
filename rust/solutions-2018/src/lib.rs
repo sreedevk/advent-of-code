@@ -1,1 +1,3 @@
-pub mod day1;
+#![allow(unused_imports)]
+
+pub mod day3;

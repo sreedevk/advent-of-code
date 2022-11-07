@@ -804,6 +804,7 @@ dependencies = [
 name = "solutions-2015"
 version = "0.1.0"
 dependencies = [
+ "common",
  "nom",
 ]
 

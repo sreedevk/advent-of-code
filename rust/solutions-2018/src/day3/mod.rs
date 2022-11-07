@@ -1,21 +1,55 @@
 pub struct Day3;
-use std::fs;
 use nom::{
-    IResult,
-    bytes::complete::tag,
-    character::complete::{space0, alpha1, digit1}, 
-    combinator::map,
     branch::alt,
+    bytes::complete::tag,
+    character::complete::{alpha1, digit1, space0},
+    combinator::map,
     sequence::tuple,
+    IResult,
 };
+use std::{fs, sync::mpsc::RecvTimeoutError, ops::Range};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Claim {
     pub id: u32,
     pub xoffset: u32,
     pub yoffset: u32,
     pub width: u32,
-    pub height: u32
+    pub height: u32,
+}
+
+struct Rectangle {
+    a: (u32, u32), // top left
+    b: (u32, u32), // top right,
+    c: (u32, u32), // bottom left
+    d: (u32, u32), // bottom right
+}
+
+impl Rectangle {
+    fn new(claim: &Claim) -> Self {
+        let tl_x = claim.xoffset;
+        let tl_y = claim.yoffset;
+
+        let tr_x = claim.xoffset + claim.width;
+        let tr_y = claim.yoffset;
+
+        let bl_x = claim.xoffset;
+        let bl_y = claim.yoffset + claim.height;
+
+        let br_x = claim.xoffset + claim.width;
+        let br_y = claim.yoffset + claim.height;
+
+        Self {
+            a: (tl_x, tl_y),
+            b: (tr_x, tr_y),
+            c: (bl_x, bl_y),
+            d: (br_x, br_y),
+        }
+    }
+
+    fn overlaps(rec1: &Rectangle, rec2: &Rectangle) -> bool {
+        true
+    }
 }
 
 type ParsedClaim<'a> = (
@@ -31,7 +65,7 @@ type ParsedClaim<'a> = (
     &'a str,
     &'a str,
     &'a str,
-    &'a str
+    &'a str,
 );
 
 impl Claim {
@@ -42,30 +76,33 @@ impl Claim {
             xoffset: u32::from_str_radix(xoffset, 10).unwrap(),
             yoffset: u32::from_str_radix(yoffset, 10).unwrap(),
             height: u32::from_str_radix(height, 10).unwrap(),
-            width: u32::from_str_radix(width, 10).unwrap()
+            width: u32::from_str_radix(width, 10).unwrap(),
         }
-    }
-
-    pub fn does_overlap(&self, c: &Claim) -> bool {
-        true
     }
 }
 
 impl Day3 {
     pub fn solve() -> [String; 2] {
-        [
-            Self::solve1(),
-            Self::solve2()
-        ] 
+        [Self::solve1(), Self::solve2()]
     }
 
     fn solve1() -> String {
-        let x = Self::parse_data("data/main/2018/day3.txt");
-        dbg!(x);
-        
-        String::from("test")
+        let claims = Self::parse_data("data/main/2018/day3.txt");
+        let overlapping_claims: Vec<Claim> = claims
+            .clone()
+            .into_iter()
+            .filter(|claim| {
+                let r1 = Rectangle::new(&claim);
+                claims.iter().any(|claim2| {
+                    let r2 = Rectangle::new(claim2);
+                    Rectangle::overlaps(&r1, &r2)
+                })
+            })
+            .collect();
+
+        String::from(format!("{}", overlapping_claims.len()))
     }
-    
+
     fn solve2() -> String {
         String::from("test")
     }
@@ -85,14 +122,14 @@ impl Day3 {
                 space0,
                 digit1,
                 tag("x"),
-                digit1
+                digit1,
             )),
-            move |c| Claim::new(c)
+            move |c| Claim::new(c),
         )(raw_claim)
     }
 
     fn parse_data(filepath: &str) -> Vec<Claim> {
-       fs::read_to_string(filepath)
+        fs::read_to_string(filepath)
             .expect("unable to read file!")
             .trim()
             .split("\n")

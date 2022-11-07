@@ -1,4 +1,4 @@
 [workspace]
 members = ["runner", "common", "solutions-2021", "solutions-2015", "aoc-utils"]
-exclude = ["data", "challenges"]
+exclude = ["data", "challenges", "templates"]
 default-members = ["runner"]

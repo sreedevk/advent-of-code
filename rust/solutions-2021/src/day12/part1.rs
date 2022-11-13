@@ -1,21 +1,6 @@
-use std::collections::{HashMap, HashSet};
+use super::{build_cavemap, is_lowercase, CaveMap};
+use std::collections::HashSet;
 use std::fs;
-
-type CaveMap<'a> = HashMap<&'a str, Vec<&'a str>>;
-
-fn build_cavemap<'a>(raw_data: Vec<&'a str>) -> CaveMap<'a> {
-    let mut cave_map = CaveMap::new();
-    raw_data.iter().for_each(|map_part| {
-        let (from, to) = map_part.split_once("-").unwrap();
-
-        cave_map.entry(from).or_insert(vec![]).push(to);
-
-        cave_map.entry(to).or_insert(vec![]).push(from);
-    });
-
-    dbg!(&cave_map);
-    cave_map
-}
 
 fn count_paths<'a>(
     map: &CaveMap,
@@ -38,10 +23,6 @@ fn count_paths<'a>(
             }
         }
     }
-}
-
-fn is_lowercase(node: &str) -> bool {
-    node.chars().all(|chr| chr.is_ascii_lowercase())
 }
 
 pub fn solve() -> String {

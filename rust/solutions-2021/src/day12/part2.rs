@@ -1,27 +1,21 @@
 use super::{build_cavemap, is_lowercase, CaveMap};
-use std::{
-    collections::{HashMap, HashSet},
-    fs,
-};
+use std::{collections::HashMap, fs};
 
-fn has_repeats(set: &HashSet<&str>) -> bool {
+fn has_repeats(set: &Vec<&str>) -> bool {
     let mut freq: HashMap<&str, usize> = HashMap::new();
     for item in set.iter().filter(|x| is_lowercase(x)) {
         freq.entry(item)
             .and_modify(|count| *count += 1)
-            .or_insert(0);
+            .or_insert(1);
     }
-    if freq.values().any(|val| *val == 1) {
-        true
-    } else {
-        false
-    }
+
+    freq.values().any(|val| *val >= 2)
 }
 
 fn count_paths<'a>(
     map: &CaveMap,
     position: &'a str,
-    visited: &mut HashSet<&'a str>,
+    visited: &mut Vec<&'a str>,
     paths_count: &mut usize,
 ) {
     if position == "end" {
@@ -29,14 +23,21 @@ fn count_paths<'a>(
         return;
     }
 
-    visited.insert(position);
+    visited.push(position);
 
     if let Some(paths) = map.get(position) {
         for path in paths {
-            if is_lowercase(path) && has_repeats(visited) {
-                continue;
-            } else {
-                count_paths(map, path, &mut visited.clone(), paths_count)
+            match *path {
+                "start" => continue,
+                cpath if is_lowercase(cpath) && visited.contains(&cpath) => {
+                    if has_repeats(visited) {
+                        continue
+                    }
+                    else {
+                        count_paths(map, path, &mut visited.clone(), paths_count)
+                    }
+                },
+                _ => count_paths(map, path, &mut visited.clone(), paths_count)
             }
         }
     }
@@ -44,7 +45,7 @@ fn count_paths<'a>(
 
 pub fn solve() -> String {
     let raw_data: String =
-        fs::read_to_string("data/example/2021/day12.txt").expect("input data not found");
+        fs::read_to_string("data/main/2021/day12.txt").expect("input data not found");
 
     let raw_data_lines: Vec<&str> = raw_data
         .trim()
@@ -53,10 +54,9 @@ pub fn solve() -> String {
         .collect();
 
     let cavemap = build_cavemap(raw_data_lines);
-    let mut visited: HashSet<&str> = HashSet::new();
+    let mut visited: Vec<&str> = Vec::new();
     let mut paths_count: usize = 0;
 
     count_paths(&cavemap, "start", &mut visited, &mut paths_count);
-
     String::from(format!("{}", paths_count))
 }

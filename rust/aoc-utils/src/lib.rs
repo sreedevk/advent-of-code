@@ -36,8 +36,8 @@ impl Aoc {
         fs::create_dir_all(format!("solutions-{}/src/day{}/", year, day)).unwrap();
 
         /* write input data*/
-        fs::write(format!("data/main/{}/{}.txt", year, day), &input).unwrap();
-        fs::write(format!("data/example/{}/{}.txt", year, day), &input).unwrap();
+        fs::write(format!("data/main/{}/day{}.txt", year, day), &input).unwrap();
+        fs::write(format!("data/example/{}/day{}.txt", year, day), &input).unwrap();
 
         /* write files for solution */
         fs::write(format!("solutions-{}/src/day{}/mod.rs", year, day), raw_template).unwrap();

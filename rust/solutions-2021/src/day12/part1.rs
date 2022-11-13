@@ -58,7 +58,5 @@ pub fn solve() -> String {
     let mut paths_count = 0usize;
 
     count_paths(&cave_map, "start", &mut visited_set, &mut paths_count);
-    dbg!(paths_count);
-
-    String::from("2021")
+    String::from(format!("{}", paths_count))
 }

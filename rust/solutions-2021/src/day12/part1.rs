@@ -17,28 +17,48 @@ fn build_cavemap<'a>(raw_data: Vec<&'a str>) -> CaveMap<'a> {
     cave_map
 }
 
-fn count_paths(
-    _map: &CaveMap,
-    position: &str,
-    _visited: &mut HashSet<&str>,
+fn count_paths<'a>(
+    map: &CaveMap,
+    position: &'a str,
+    visited: &mut HashSet<&'a str>,
     paths_count: &mut usize,
 ) {
     if position == String::from("end") {
         *paths_count += 1;
         return;
     }
+
+    visited.insert(position);
+    if let Some(paths) = map.get(position) {
+        for path in paths {
+            if is_lowercase(path) && visited.contains(path) {
+                continue;
+            } else {
+                count_paths(map, path, &mut visited.clone(), paths_count)
+            }
+        }
+    }
+}
+
+fn is_lowercase(node: &str) -> bool {
+    node.chars().all(|chr| chr.is_ascii_lowercase())
 }
 
 pub fn solve() -> String {
-    let raw_data = fs::read_to_string("data/example/2021/day12.txt").expect("input data not found");
-
-    let raw_data_lines: Vec<&str> = raw_data.trim().split("\n").map(|line| line.trim()).collect();
+    let raw_data: String =
+        fs::read_to_string("data/main/2021/day12.txt").expect("input data not found");
+    let raw_data_lines: Vec<&str> = raw_data
+        .trim()
+        .split("\n")
+        .map(|line| line.trim())
+        .collect();
 
     let cave_map: CaveMap = build_cavemap(raw_data_lines);
     let mut visited_set: HashSet<&str> = HashSet::new();
     let mut paths_count = 0usize;
 
     count_paths(&cave_map, "start", &mut visited_set, &mut paths_count);
+    dbg!(paths_count);
 
     String::from("2021")
 }

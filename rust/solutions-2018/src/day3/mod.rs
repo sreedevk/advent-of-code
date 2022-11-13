@@ -47,7 +47,7 @@ impl Rectangle {
         }
     }
 
-    fn overlaps(rec1: &Rectangle, rec2: &Rectangle) -> bool {
+    fn overlaps(_rec1: &Rectangle, _rec2: &Rectangle) -> bool {
         true
     }
 }

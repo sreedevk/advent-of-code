@@ -1,5 +1,3 @@
-use common::file_manager;
-
 pub struct Day13;
 
 impl Day13 {

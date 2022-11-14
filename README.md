@@ -40,3 +40,15 @@
   * year format = YY
   * day  format = D
 ```
+
+#### Clojure
+
+```bash
+  cd clojure
+  lein run -year- -day- # Running Solution
+  lein run 2021 1 benchmark # Benchmarking Solution
+
+## Examples
+  lein run 2021 1
+  lein run 2021 2 benchmark
+```

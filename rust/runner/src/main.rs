@@ -15,6 +15,7 @@ async fn main() {
                 "1" => Some(solutions_2021::day1::Day1::solve()),
                 "2" => Some(solutions_2021::day2::Day2::solve()),
                 "3" => Some(solutions_2021::day3::Day3::solve()),
+                "4" => Some(solutions_2021::day4::Day4::solve()),
                 "12" => Some(solutions_2021::day12::Day12::solve()),
                 "15" => Some(solutions_2021::day15::Day15::solve()),
                 "16" => Some(solutions_2021::day16::Day16::solve()),

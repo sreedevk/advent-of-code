@@ -2,37 +2,37 @@ require_relative './aoc'
 require 'pry'
 
 namespace :aoc do
-  desc "Set Cookie for your AOC Account Copied from the browser"
-  task :auth, [:cookie] do |t, args|
+  desc 'Set Cookie for your AOC Account Copied from the browser'
+  task :auth, [:cookie] do |_t, args|
     AOC.auth(args[:cookie])
   end
 
-  desc "Run Solution"
-  task :run, [:year, :day] do |t, args|
+  desc 'Run Solution'
+  task :run, [:year, :day] do |_t, args|
     sh("ruby ./#{args[:year]}/day#{args[:day]}/main.rb ./#{args[:year]}/day#{args[:day]}/data.txt")
   end
 
-  desc "Benchmark Solution"
-  task :benchmark, [:year, :day] do |t, args|
+  desc 'Benchmark Solution'
+  task :benchmark, [:year, :day] do |_t, args|
     sh("hyperfine \"ruby ./#{args[:year]}/day#{args[:day]}/main.rb ./#{args[:year]}/day#{args[:day]}/data.txt\" --warmup 3")
   end
 
-  desc "fetch templates"
-  task :init, [:year, :day] do |t, args|
+  desc 'fetch templates'
+  task :init, [:year, :day] do |_t, args|
     AOC.new(args[:year], args[:day])
   end
 
-  desc "help"
+  desc 'help'
   task :help do
     puts <<-SPLASH
 
-     █████  ██████  ██    ██ ███████ ███    ██ ████████      ██████  ███████      ██████  ██████  ██████  ███████ 
-    ██   ██ ██   ██ ██    ██ ██      ████   ██    ██        ██    ██ ██          ██      ██    ██ ██   ██ ██      
-    ███████ ██   ██ ██    ██ █████   ██ ██  ██    ██        ██    ██ █████       ██      ██    ██ ██   ██ █████   
-    ██   ██ ██   ██  ██  ██  ██      ██  ██ ██    ██        ██    ██ ██          ██      ██    ██ ██   ██ ██      
+     █████  ██████  ██    ██ ███████ ███    ██ ████████      ██████  ███████      ██████  ██████  ██████  ███████
+    ██   ██ ██   ██ ██    ██ ██      ████   ██    ██        ██    ██ ██          ██      ██    ██ ██   ██ ██
+    ███████ ██   ██ ██    ██ █████   ██ ██  ██    ██        ██    ██ █████       ██      ██    ██ ██   ██ █████
+    ██   ██ ██   ██  ██  ██  ██      ██  ██ ██    ██        ██    ██ ██          ██      ██    ██ ██   ██ ██
     ██   ██ ██████    ████   ███████ ██   ████    ██         ██████  ██           ██████  ██████  ██████  ███████
 
     SPLASH
-    sh("rake -T")
+    sh('rake -T')
   end
 end

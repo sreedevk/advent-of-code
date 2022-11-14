@@ -2,76 +2,41 @@
 
 ![cxud1s5i396p0nrkz2v4](https://user-images.githubusercontent.com/36154121/144250485-dcf907f5-57a8-4137-8e7a-41e0fe89bce3.png)
 
-### Completed Solutions Map
+### Usage
+
+```bash
+  git clone https://github.com/sreedevk/advent-of-code
+  cd advent-of-code
+```
 
 #### Rust
+
+```bash
+  cd rust
+  cargo run --release 2021 12 # run solution for 2021 day 12 (part 1 & 2)
+  cargo run --release fetch 2021 12 # !will reset the solution file & update the example + data files
 ```
- └─ 2021
-    ├─ day01
-    ├─ day02
-    ├─ day03
+
+#### Ruby
+```bash
+  cd ruby
+  rake aoc:auth[cookie]         # Set Cookie for your AOC Account Copied from the browser
+  rake aoc:benchmark[year,day]  # Benchmark Solution
+  rake aoc:help                 # help
+  rake aoc:init[year,day]       # fetch templates
+  rake aoc:run[year,day]        # Run Solution
 ```
 
 #### Elixir
-```
- └─ 2020
- │  ├─ day01
- │  ├─ day02
- │  ├─ day03
- │  ├─ day04
- │  ├─ day05
- │  ├─ day06
- │  ├─ day07
- │  ├─ day08
- │  ├─ day10
- └─ 2021
-    ├─ day01
-    ├─ day02
-    ├─ day03 (PART I)
-    ├─ day06
-    ├─ day07
-    ├─ day13
-```
 
-#### Clojure
-```
- └─ 2021
-    ├─ day01
-    ├─ day02
-```
-
-
-#### Ruby
-```
- └─ 2020
- │  ├─ day1
- │  ├─ day2
- │  ├─ day3
- │  ├─ day4
- │  ├─ day5
- │  ├─ day6
- │  ├─ day7
- │  ├─ day8
- │  ├─ day9
- │  ├─ day10
- │  ├─ day11
- │  ├─ day12
- │  ├─ day13
- │  ├─ day14
- │  ├─ day15
- │  ├─ day16
- │  ├─ day18
- └─ 2021
-    ├─ day1
-    ├─ day3 (PART II)
-    ├─ day4
-    ├─ day5
-    ├─ day6
-    ├─ day7
-    ├─ day8
-    ├─ day9
-    ├─ day10
-    ├─ day11 (NEEDS REFACTORING)
-    ├─ day13
-    ├─ day14
+```bash
+  mix aoc authenticate <cookie>          # add browser cookie for problem fetching from adventofcode.com
+  mix aoc init <year> <day>              # setup files + fetch problem for solving
+  mix aoc solve <year> <day>             # run part 1 & part 2 solution for year / day
+  mix aoc solve <year> <day> <part>      # run part solution for year / day
+  mix aoc benchmark <year> <day>         # run part 1 & part 2 solution for year / day
+  mix aoc benchmark <year> <day> <part>  # run part solution for year / day / part
+  
+  * year format = YY
+  * day  format = D
 ```

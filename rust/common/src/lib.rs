@@ -1,3 +1,3 @@
 pub mod file_manager;
-pub mod matrix;
+pub mod grid;
 pub mod iterables;

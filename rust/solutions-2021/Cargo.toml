@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 common = { path = "../common" }
+ndarray = "0.15.6"
 nom = "7.1.1"
 petgraph = "0.6.2"
 uint = "0.9.3"

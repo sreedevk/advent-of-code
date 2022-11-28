@@ -1,14 +1,11 @@
 pub struct Day3;
-use common::{matrix, file_manager};
+use common::{file_manager, grid};
 mod part1;
 mod part2;
 
 impl Day3 {
     pub fn solve() -> [String; 2] {
-        [
-            part1::solve(),
-            part2::solve(),
-        ]
+        [part1::solve(), part2::solve()]
     }
 
     pub fn raw_data() -> Vec<String> {
@@ -18,14 +15,17 @@ impl Day3 {
     pub fn processed_data() -> Vec<(usize, usize)> {
         let input_data: Vec<Vec<char>> = Day3::raw_data()
             .into_iter()
-            .map(|x| x.chars().collect::<Vec<char>>() )
+            .map(|x| x.chars().collect::<Vec<char>>())
             .collect();
 
-        matrix::rotate_cw(input_data)
+        grid::rotate_cw(input_data)
             .into_iter()
-            .map(|x| x.into_iter().fold(String::new(), |acc, data| acc + data.to_string().as_str()) )
-            .map(|x| x.chars().collect() )
-            .map(|x| (Day3::count_ones(&x), Day3::count_zeros(&x)) )
+            .map(|x| {
+                x.into_iter()
+                    .fold(String::new(), |acc, data| acc + data.to_string().as_str())
+            })
+            .map(|x| x.chars().collect())
+            .map(|x| (Day3::count_ones(&x), Day3::count_zeros(&x)))
             .collect::<Vec<(usize, usize)>>()
     }
 
@@ -33,7 +33,7 @@ impl Day3 {
         bitstring
             .to_owned()
             .into_iter()
-            .filter(|y| y.to_owned() == '0' )
+            .filter(|y| y.to_owned() == '0')
             .collect::<Vec<char>>()
             .len()
     }
@@ -42,7 +42,7 @@ impl Day3 {
         bitstring
             .to_owned()
             .into_iter()
-            .filter(|y| y.to_owned() == '1' )
+            .filter(|y| y.to_owned() == '1')
             .collect::<Vec<char>>()
             .len()
     }

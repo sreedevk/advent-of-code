@@ -45,7 +45,7 @@ fn parse_operator(bin: String) -> Packet {
         "0" => {
             let sub_packet_size = usize::from_str_radix(&bin[7..22], 2).unwrap();
             let raw_sub_packets = &bin[22..(22 + sub_packet_size)];
-            let sub_packets = to_packet()
+            // let sub_packets = to_packet()
         }
         "1" => {}
         _ => panic!("INVALID LENGTH TYPE ID"),

@@ -687,6 +687,7 @@ dependencies = [
  "solutions-2015",
  "solutions-2018",
  "solutions-2021",
+ "solutions-2022",
  "tl",
  "tokio",
  "uint",
@@ -818,6 +819,17 @@ dependencies = [
 
 [[package]]
 name = "solutions-2021"
+version = "0.1.0"
+dependencies = [
+ "common",
+ "ndarray",
+ "nom",
+ "petgraph",
+ "uint",
+]
+
+[[package]]
+name = "solutions-2022"
 version = "0.1.0"
 dependencies = [
  "common",

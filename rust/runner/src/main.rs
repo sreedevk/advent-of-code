@@ -2,6 +2,7 @@ use aoc_utils::Aoc;
 use solutions_2015;
 use solutions_2018;
 use solutions_2021;
+use solutions_2022;
 use std::env;
 use std::process::exit;
 
@@ -10,6 +11,10 @@ use std::process::exit;
 async fn main() {
     let args: Vec<String> = env::args().collect();
     let solution: Option<[String; 2]> = match args[1].as_str() {
+        "2022" => match args[2].as_str() {
+            "1" => Some(solutions_2022::day1::Day1::solve()),
+            _ => None
+        },
         "2021" => match args[2].as_str() {
             "1" => Some(solutions_2021::day1::Day1::solve()),
             "2" => Some(solutions_2021::day2::Day2::solve()),

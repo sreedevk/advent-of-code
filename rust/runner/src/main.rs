@@ -10,6 +10,7 @@ async fn main() {
         "2022" => match args[2].as_str() {
             "1" => Some(solutions_2022::day1::Day1::solve),
             "2" => Some(solutions_2022::day2::Day2::solve),
+            "3" => Some(solutions_2022::day3::Day3::solve),
             _ => None,
         },
         "2021" => match args[2].as_str() {

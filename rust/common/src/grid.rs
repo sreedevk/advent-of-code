@@ -42,17 +42,17 @@ where
     }
 }
 
-pub fn split_at_x<T>(input_vec: &Vec<Vec<T>>, mag: usize) -> (Vec<Vec<T>>, Vec<Vec<T>>)
+pub fn split_at_x<T>(input_vec: &[Vec<T>], mag: usize) -> (Vec<Vec<T>>, Vec<Vec<T>>)
 where
     T: Clone,
 {
     let xsize = input_vec[0].len();
     let left: Vec<Vec<_>> = input_vec
-        .into_iter()
+        .iter()
         .map(|row| Vec::from(&row[0..mag]))
         .collect();
     let right: Vec<Vec<_>> = input_vec
-        .into_iter()
+        .iter()
         .map(|row| Vec::from(&row[(mag + 1)..xsize]))
         .collect::<Vec<Vec<T>>>();
 
@@ -69,23 +69,23 @@ where
     (top, bottom)
 }
 
-pub fn flip_x<T>(grid: &Vec<Vec<T>>) -> Vec<Vec<T>>
+pub fn flip_x<T>(grid: &[Vec<T>]) -> Vec<Vec<T>>
 where
     T: Clone,
 {
-    let mut output_grid = grid.clone();
+    let mut output_grid = grid.to_owned();
     output_grid.iter_mut().for_each(|mvec| mvec.reverse());
     output_grid.to_vec()
 }
 
-pub fn flip_y<T>(grid: &Vec<Vec<T>>) -> Vec<Vec<T>>
+pub fn flip_y<T>(grid: &[Vec<T>]) -> Vec<Vec<T>>
 where
     T: Clone,
 {
-    let mut output_grid = grid.clone();
+    let mut output_grid = grid.to_owned();
     output_grid.reverse();
 
-    return output_grid.to_vec();
+    output_grid.to_vec()
 }
 
 #[cfg(test)]

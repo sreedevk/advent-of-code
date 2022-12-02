@@ -3,8 +3,8 @@ use itertools::Itertools;
 
 impl Day1 {
     pub fn solve() -> [String; 2] {
-        let p1 = std::thread::spawn(|| Day1::solve1());
-        let p2 = std::thread::spawn(|| Day1::solve2());
+        let p1 = std::thread::spawn(Day1::solve1);
+        let p2 = std::thread::spawn(Day1::solve2);
         let s1 = p1.join();
         let s2 = p2.join();
 
@@ -17,13 +17,13 @@ impl Day1 {
             .trim()
             .split("\n\n")
             .map(|elf| {
-                elf.split("\n")
-                    .map(|meal| usize::from_str_radix(meal.trim(), 10).unwrap())
+                elf.split('\n')
+                    .map(|meal| meal.trim().parse::<usize>().unwrap())
                     .sum::<usize>()
             })
             .max();
 
-        String::from(format!("{:?}", solution.unwrap()))
+        format!("{:?}", solution.unwrap())
     }
 
     fn solve2() -> String {
@@ -32,15 +32,15 @@ impl Day1 {
             .trim()
             .split("\n\n")
             .map(|elf| {
-                elf.split("\n")
-                    .map(|meal| usize::from_str_radix(meal.trim(), 10).unwrap())
-                    .fold(0, |count, item| count + item)
+                elf.split('\n')
+                    .map(|meal| meal.trim().parse::<usize>().unwrap())
+                    .sum::<usize>()
             })
             .sorted()
             .rev()
             .take(3)
             .sum::<usize>();
 
-        String::from(format!("{:?}", solution))
+        format!("{:?}", solution)
     }
 }

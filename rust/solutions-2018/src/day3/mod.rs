@@ -72,11 +72,11 @@ impl Claim {
     pub fn new(c: ParsedClaim) -> Self {
         let (_, id, _, _, _, xoffset, _, yoffset, _, _, width, _, height) = c;
         Claim {
-            id: u32::from_str_radix(id, 10).unwrap(),
-            xoffset: u32::from_str_radix(xoffset, 10).unwrap(),
-            yoffset: u32::from_str_radix(yoffset, 10).unwrap(),
-            height: u32::from_str_radix(height, 10).unwrap(),
-            width: u32::from_str_radix(width, 10).unwrap(),
+            id: id.parse::<u32>().unwrap(),
+            xoffset: xoffset.parse::<u32>().unwrap(),
+            yoffset: yoffset.parse::<u32>().unwrap(),
+            height: height.parse::<u32>().unwrap(),
+            width: width.parse::<u32>().unwrap(),
         }
     }
 }
@@ -88,19 +88,18 @@ impl Day3 {
 
     fn solve1() -> String {
         let claims = Self::parse_data("data/main/2018/day3.txt");
-        let overlapping_claims: Vec<Claim> = claims
+        let overlapping_claims = claims
             .clone()
             .into_iter()
             .filter(|claim| {
-                let r1 = Rectangle::new(&claim);
+                let r1 = Rectangle::new(claim);
                 claims.iter().any(|claim2| {
                     let r2 = Rectangle::new(claim2);
                     Rectangle::overlaps(&r1, &r2)
                 })
-            })
-            .collect();
+            });
 
-        String::from(format!("{}", overlapping_claims.len()))
+        format!("{}", overlapping_claims.count())
     }
 
     fn solve2() -> String {
@@ -124,7 +123,7 @@ impl Day3 {
                 tag("x"),
                 digit1,
             )),
-            move |c| Claim::new(c),
+            Claim::new,
         )(raw_claim)
     }
 
@@ -132,7 +131,7 @@ impl Day3 {
         fs::read_to_string(filepath)
             .expect("unable to read file!")
             .trim()
-            .split("\n")
+            .split('\n')
             .map(|x| {
                 let (_, claim) = Self::parse_claim(x).unwrap();
                 claim

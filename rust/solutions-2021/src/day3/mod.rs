@@ -24,26 +24,16 @@ impl Day3 {
                 x.into_iter()
                     .fold(String::new(), |acc, data| acc + data.to_string().as_str())
             })
-            .map(|x| x.chars().collect())
+            .map(|x| x.chars().collect::<Vec<char>>())
             .map(|x| (Day3::count_ones(&x), Day3::count_zeros(&x)))
             .collect::<Vec<(usize, usize)>>()
     }
 
-    fn count_zeros(bitstring: &Vec<char>) -> usize {
-        bitstring
-            .to_owned()
-            .into_iter()
-            .filter(|y| y.to_owned() == '0')
-            .collect::<Vec<char>>()
-            .len()
+    fn count_zeros(bitstring: &[char]) -> usize {
+        bitstring.iter().copied().filter(|y| *y == '0').count()
     }
 
-    fn count_ones(bitstring: &Vec<char>) -> usize {
-        bitstring
-            .to_owned()
-            .into_iter()
-            .filter(|y| y.to_owned() == '1')
-            .collect::<Vec<char>>()
-            .len()
+    fn count_ones(bitstring: &[char]) -> usize {
+        bitstring.iter().copied().filter(|y| *y == '1').count()
     }
 }

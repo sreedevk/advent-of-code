@@ -17,10 +17,9 @@ impl Day1 {
             .windows(2)
             .map(|input| input[1] > input[0] )
             .filter(|input| *input )
-            .collect::<Vec<bool>>()
-            .len();
+            .count();
 
-        return String::from(format!("{}", solution));
+        format!("{}", solution)
     }
 
     fn solve2() -> String {
@@ -34,9 +33,8 @@ impl Day1 {
             .windows(2)
             .map( |input| input[1] > input[0] )
             .filter( |input| *input )
-            .collect::<Vec<bool>>()
-            .len();
+            .count();
 
-        return String::from(format!("{}", solution));
+        format!("{}", solution)
     }
 }

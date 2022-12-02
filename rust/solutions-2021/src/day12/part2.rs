@@ -1,7 +1,7 @@
 use super::{build_cavemap, is_lowercase, CaveMap};
 use std::{collections::HashMap, fs};
 
-fn has_repeats(set: &Vec<&str>) -> bool {
+fn has_repeats(set: &[&str]) -> bool {
     let mut freq: HashMap<&str, usize> = HashMap::new();
     for item in set.iter().filter(|x| is_lowercase(x)) {
         freq.entry(item)
@@ -49,7 +49,7 @@ pub fn solve() -> String {
 
     let raw_data_lines: Vec<&str> = raw_data
         .trim()
-        .split("\n")
+        .split('\n')
         .map(|line| line.trim())
         .collect();
 
@@ -58,5 +58,5 @@ pub fn solve() -> String {
     let mut paths_count: usize = 0;
 
     count_paths(&cavemap, "start", &mut visited, &mut paths_count);
-    String::from(format!("{}", paths_count))
+    format!("{}", paths_count)
 }

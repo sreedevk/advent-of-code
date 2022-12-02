@@ -25,22 +25,19 @@ pub fn print_grid(dgrid: &Grid) {
     });
 }
 
-pub fn max_x(coords: &Vec<Coordinate>) -> usize {
+pub fn max_x(coords: &[Coordinate]) -> usize {
     coords
-        .into_iter()
-        .max_by(|a, b| a.0.cmp(&b.0))
-        .and_then(|a| Some(a.0 + 1))
-        .or(Some(1))
-        .unwrap()
+        .iter()
+        .max_by(|a, b| a.0.cmp(&b.0)).map(|a| a.0 + 1)
+        .unwrap_or(1)
 }
 
-pub fn max_y(coords: &Vec<Coordinate>) -> usize {
+pub fn max_y(coords: &[Coordinate]) -> usize {
     coords
-        .into_iter()
-        .max_by(|a, b| a.1.cmp(&b.1))
-        .and_then(|a| Some(a.1 + 1))
-        .or(Some(1))
-        .unwrap()
+        .iter()
+        .max_by(|a, b| a.1.cmp(&b.1)).map(|a| a.1 + 1)
+        .unwrap_or(1)
+
 }
 
 fn fold_x(cgrid: &Grid, mag: usize) -> Grid {
@@ -92,12 +89,12 @@ impl Day13 {
         let data = fs::read_to_string("data/main/2021/day13.txt").unwrap();
         let (raw_coords, _) = data.trim().split_once("\n\n").unwrap();
         raw_coords
-            .split("\n")
+            .split('\n')
             .map(|coord| {
-                let (x_str, y_str) = coord.trim().split_once(",").unwrap();
+                let (x_str, y_str) = coord.trim().split_once(',').unwrap();
                 (
-                    usize::from_str_radix(x_str, 10).unwrap(),
-                    usize::from_str_radix(y_str, 10).unwrap(),
+                    x_str.parse::<usize>().unwrap(),
+                    y_str.parse::<usize>().unwrap(),
                 )
             })
             .collect()
@@ -113,16 +110,16 @@ impl Day13 {
             };
             Fold {
                 axis,
-                mag: usize::from_str_radix(mag_str, 10).unwrap(),
+                mag: mag_str.parse::<usize>().unwrap(),
             }
         };
 
         let data = fs::read_to_string("data/main/2021/day13.txt").unwrap();
         let (_, raw_folds) = data.trim().split_once("\n\n").unwrap();
         raw_folds
-            .split("\n")
-            .map(|fold| fold.split(" ").last().unwrap())
-            .map(|fold| fold.split("=").collect::<Vec<&str>>())
+            .split('\n')
+            .map(|fold| fold.split(' ').last().unwrap())
+            .map(|fold| fold.split('=').collect::<Vec<&str>>())
             .map(|fold| parse_fold(&fold))
             .collect()
     }

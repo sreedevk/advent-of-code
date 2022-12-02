@@ -30,7 +30,7 @@ impl Day7 {
         fs::read_to_string(path)
             .expect("InvalidFile")
             .trim()
-            .split("\n")
+            .split('\n')
             .map(String::from)
             .collect()
     }

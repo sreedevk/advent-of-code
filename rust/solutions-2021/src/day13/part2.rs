@@ -1,6 +1,6 @@
 use super::{fold, max_x, max_y, print_grid, Coordinate, Fold};
 
-pub fn solve(coords: &Vec<Coordinate>, folds: &Vec<Fold>) -> String {
+pub fn solve(coords: &[Coordinate], folds: &[Fold]) -> String {
     let mut main_grid = vec![vec![0; max_x(coords)]; max_y(coords)];
     coords
         .iter()

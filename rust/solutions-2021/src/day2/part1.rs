@@ -9,7 +9,7 @@ impl Part1 {
     }
 
     fn geninst(raw: &str) -> Instruction {
-        match raw.split(" ").collect::<Vec<&str>>()[..] {
+        match raw.split(' ').collect::<Vec<&str>>()[..] {
             ["forward", x] => Instruction{ x: x.parse::<i32>().unwrap(), y: 0 },
             ["down", x]    => Instruction{ x: 0, y: x.parse::<i32>().unwrap() },
             ["up", x]      => Instruction{ x: 0, y: (0 - x.parse::<i32>().unwrap())  },
@@ -19,8 +19,8 @@ impl Part1 {
 
     pub fn solve(raw_data: &str) -> i32 {
         let sub = raw_data
-            .split("\n")
-            .map(|input| Part1::geninst(input) )
+            .split('\n')
+            .map(Part1::geninst)
             .collect::<Vec<Instruction>>()
             .into_iter()
             .fold(Submarine { y: 0, x: 0 }, |acc, isq| Part1::process(&acc, &isq) );

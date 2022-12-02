@@ -32,20 +32,20 @@ fn parse_boards(input: &str) -> Vec<Board> {
     input
         .trim()
         .split("\n\n")
-        .map(|raw_board| parse_board(raw_board))
+        .map(parse_board)
         .collect()
 }
 
 fn parse_board(input: &str) -> Board {
     input
         .trim()
-        .split("\n")
+        .split('\n')
         .map(|line| {
             line.trim()
-                .split(" ")
+                .split(' ')
                 .filter(|num| !num.is_empty())
                 .map(|num| Slot {
-                    num: usize::from_str_radix(num.trim(), 10).unwrap(),
+                    num: num.trim().parse::<usize>().unwrap(),
                     called: false,
                 })
                 .collect()
@@ -56,9 +56,9 @@ fn parse_board(input: &str) -> Board {
 fn parse_calls(input: &str) -> Calls {
     input
         .trim()
-        .split(",")
+        .split(',')
         .map(|char| char.trim())
-        .map(|num| usize::from_str_radix(num, 10).unwrap())
+        .map(|num| num.parse::<usize>().unwrap())
         .collect()
 }
 

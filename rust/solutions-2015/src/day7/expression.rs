@@ -39,40 +39,40 @@ impl<'a> Expression<'_> {
     pub fn eval(&self, circ: Circuit) -> Circuit {
         match self.operation {
             Operation::Or => {
-                let mut new_circuit = circ.clone();
+                let mut new_circuit = circ;
                 let op1 = Self::reduce_value(self.operands[0], &new_circuit);
                 let op2 = Self::reduce_value(self.operands[1], &new_circuit);
                 new_circuit.insert(Self::wire_name(self.assignment).to_owned(), op1 | op2);
                 new_circuit
             },
             Operation::And => {
-                let mut new_circuit = circ.clone();
+                let mut new_circuit = circ;
                 let op1 = Self::reduce_value(self.operands[0], &new_circuit);
                 let op2 = Self::reduce_value(self.operands[1], &new_circuit);
                 new_circuit.insert(Self::wire_name(self.assignment).to_owned(), op1 & op2);
                 new_circuit
             },
             Operation::Nop => {
-                let mut new_circuit = circ.clone();
+                let mut new_circuit = circ;
                 let op1 = Self::reduce_value(self.operands[0], &new_circuit);
                 new_circuit.insert(Self::wire_name(self.assignment).to_owned(), op1);
                 new_circuit
             },
             Operation::Not => {
-                let mut new_circuit = circ.clone();
+                let mut new_circuit = circ;
                 let op1 = Self::reduce_value(self.operands[0], &new_circuit);
                 new_circuit.insert(Self::wire_name(self.assignment).to_owned(), !op1);
                 new_circuit
             },
             Operation::RShift => {
-                let mut new_circuit = circ.clone();
+                let mut new_circuit = circ;
                 let op1 = Self::reduce_value(self.operands[0], &new_circuit);
                 let op2 = Self::reduce_value(self.operands[1], &new_circuit);
                 new_circuit.insert(Self::wire_name(self.assignment).to_owned(), op1 >> op2);
                 new_circuit
             },
             Operation::LShift => {
-                let mut new_circuit = circ.clone();
+                let mut new_circuit = circ;
                 let op1 = Self::reduce_value(self.operands[0], &new_circuit);
                 let op2 = Self::reduce_value(self.operands[1], &new_circuit);
                 new_circuit.insert(Self::wire_name(self.assignment).to_owned(), op1 << op2);

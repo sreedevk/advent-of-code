@@ -8,7 +8,7 @@ fn count_paths<'a>(
     visited: &mut HashSet<&'a str>,
     paths_count: &mut usize,
 ) {
-    if position == String::from("end") {
+    if position == "end" {
         *paths_count += 1;
         return;
     }
@@ -30,7 +30,7 @@ pub fn solve() -> String {
         fs::read_to_string("data/main/2021/day12.txt").expect("input data not found");
     let raw_data_lines: Vec<&str> = raw_data
         .trim()
-        .split("\n")
+        .split('\n')
         .map(|line| line.trim())
         .collect();
 
@@ -39,5 +39,5 @@ pub fn solve() -> String {
     let mut paths_count = 0usize;
 
     count_paths(&cave_map, "start", &mut visited_set, &mut paths_count);
-    String::from(format!("{}", paths_count))
+    format!("{}", paths_count)
 }

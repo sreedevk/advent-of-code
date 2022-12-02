@@ -1,8 +1,4 @@
 use aoc_utils::Aoc;
-use solutions_2015;
-use solutions_2018;
-use solutions_2021;
-use solutions_2022;
 use std::env;
 use std::process::exit;
 
@@ -23,8 +19,6 @@ async fn main() {
             "4" => Some(solutions_2021::day4::Day4::solve),
             "12" => Some(solutions_2021::day12::Day12::solve),
             "13" => Some(solutions_2021::day13::Day13::solve),
-            "15" => Some(solutions_2021::day15::Day15::solve),
-            "16" => Some(solutions_2021::day16::Day16::solve),
             _ => None,
         },
         "2018" => match args[2].as_str() {

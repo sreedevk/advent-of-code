@@ -1,66 +1,119 @@
 use nom::{
-    IResult,
-    bytes::complete::tag,
-    character::complete::{space0, alpha1, digit1}, 
-    combinator::map,
     branch::alt,
+    bytes::complete::tag,
+    character::complete::{alpha1, digit1, space0},
+    combinator::map,
     sequence::tuple,
+    IResult,
 };
 
-use super::expression::Value;
 use super::expression::Expression;
-
+use super::expression::Value;
 
 fn parse_value(input: &str) -> IResult<&str, Value> {
-    alt(
-        (map(alpha1, |c: &str| Value::Wire(c) ),
-            map(digit1, |c: &str| Value::Signal(u16::from_str_radix(c, 10).unwrap()) ))
-    )(input)
+    alt((
+        map(alpha1, Value::Wire),
+        map(digit1, |c: &str| Value::Signal(c.parse::<u16>().unwrap())),
+    ))(input)
 }
 
 fn parse_not(input: &str) -> IResult<&str, Expression> {
     map(
-        tuple((tag("NOT"), space0, parse_value, space0, tag("->"), space0, parse_value)),
-        move |c| Expression::not(c)
+        tuple((
+            tag("NOT"),
+            space0,
+            parse_value,
+            space0,
+            tag("->"),
+            space0,
+            parse_value,
+        )),
+        Expression::not,
     )(input)
 }
 
 fn parse_and(input: &str) -> IResult<&str, Expression> {
     map(
-        tuple((parse_value, space0, tag("AND"), space0, parse_value, space0, tag("->"), space0, parse_value)),
-        move |c| Expression::and(c)
+        tuple((
+            parse_value,
+            space0,
+            tag("AND"),
+            space0,
+            parse_value,
+            space0,
+            tag("->"),
+            space0,
+            parse_value,
+        )),
+        Expression::and,
     )(input)
 }
 
 fn parse_or(input: &str) -> IResult<&str, Expression> {
     map(
-        tuple((parse_value, space0, tag("OR"), space0, parse_value, space0, tag("->"), space0, parse_value)),
-        move |c| Expression::or(c)
+        tuple((
+            parse_value,
+            space0,
+            tag("OR"),
+            space0,
+            parse_value,
+            space0,
+            tag("->"),
+            space0,
+            parse_value,
+        )),
+        Expression::or,
     )(input)
 }
 
 fn parse_noop(input: &str) -> IResult<&str, Expression> {
     map(
         tuple((parse_value, space0, tag("->"), space0, parse_value)),
-        move |c| Expression::noop(c)
+        Expression::noop,
     )(input)
 }
 
 fn parse_lshift(input: &str) -> IResult<&str, Expression> {
     map(
-        tuple((parse_value, space0, tag("LSHIFT"), space0, parse_value, space0, tag("->"), space0, parse_value)),
-        move |c| Expression::lshift(c)
+        tuple((
+            parse_value,
+            space0,
+            tag("LSHIFT"),
+            space0,
+            parse_value,
+            space0,
+            tag("->"),
+            space0,
+            parse_value,
+        )),
+        Expression::lshift,
     )(input)
 }
 
 fn parse_rshift(input: &str) -> IResult<&str, Expression> {
     map(
-        tuple((parse_value, space0, tag("RSHIFT"), space0, parse_value, space0, tag("->"), space0, parse_value)),
-        move |c| Expression::rshift(c)
+        tuple((
+            parse_value,
+            space0,
+            tag("RSHIFT"),
+            space0,
+            parse_value,
+            space0,
+            tag("->"),
+            space0,
+            parse_value,
+        )),
+        Expression::rshift,
     )(input)
-
 }
 
 pub fn parse_expr(input: &str) -> IResult<&str, Expression> {
-    alt((parse_or, parse_and, parse_not, parse_noop, parse_rshift, parse_lshift))(input)
+    alt((
+        parse_or,
+        parse_and,
+        parse_not,
+        parse_noop,
+        parse_rshift,
+        parse_lshift,
+    ))(input)
 }

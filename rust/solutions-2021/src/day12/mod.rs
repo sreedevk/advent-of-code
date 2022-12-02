@@ -8,10 +8,10 @@ mod part2;
 use std::collections::HashMap;
 pub type CaveMap<'a> = HashMap<&'a str, Vec<&'a str>>;
 
-pub fn build_cavemap<'a>(raw_data: Vec<&'a str>) -> CaveMap<'a> {
+pub fn build_cavemap(raw_data: Vec<&str>) -> CaveMap<'_> {
     let mut cave_map = CaveMap::new();
     raw_data.iter().for_each(|map_part| {
-        let (from, to) = map_part.split_once("-").unwrap();
+        let (from, to) = map_part.split_once('-').unwrap();
 
         cave_map.entry(from).or_insert(vec![]).push(to);
         cave_map.entry(to).or_insert(vec![]).push(from);

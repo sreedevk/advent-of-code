@@ -17,8 +17,6 @@ fn decide_shape(p0: Shape, outcome: &str) -> Shape {
    }
 }
 
-
-
 fn str_to_shape(istr: &str) -> Shape {
     match istr {
         "A" | "X" => Shape::Rock,

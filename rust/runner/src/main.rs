@@ -54,9 +54,11 @@ fn solver(func: fn() -> [String; 2]) {
         .enumerate()
         .for_each(|(i, soln)| println!("PART {}: {}", i, soln));
 
-    println!(
-        "Solved in: {:?} µs | {:?} ms",
-        duration.num_microseconds().unwrap(),
-        duration.num_milliseconds()
-    );
+    if duration.num_seconds() > 0 {
+        println!("Solution took {:?} seconds", duration.num_seconds())
+    } else if duration.num_milliseconds() > 0 {
+        println!("Solution took {:?} ms", duration.num_milliseconds())
+    } else {
+        println!("Solution took {:?} µs", duration.num_microseconds().unwrap())
+    }
 }

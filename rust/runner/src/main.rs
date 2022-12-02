@@ -61,7 +61,7 @@ fn solver(func: fn() -> [String; 2]) {
         .for_each(|(i, soln)| println!("PART {}: {}", i, soln));
 
     println!(
-        "Solved in: {:?} us | {:?} ms",
+        "Solved in: {:?} µs | {:?} ms",
         duration.num_microseconds().unwrap(),
         duration.num_milliseconds()
     );

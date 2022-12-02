@@ -1,15 +1,12 @@
-use std::collections::HashMap;
 use std::fs;
 
-#[derive(PartialEq, Eq, Hash)]
+#[derive(PartialEq, Eq, Hash, Clone, Copy)]
 #[repr(u8)]
 enum Shape {
     Rock = 1,
     Paper = 2,
     Scissors = 3,
 }
-
-type WinningStrat = HashMap<Shape, Shape>;
 
 fn str_to_shape(istr: &str) -> Shape {
     match istr {
@@ -22,30 +19,30 @@ fn str_to_shape(istr: &str) -> Shape {
 
 pub fn solve() -> String {
     let data = fs::read_to_string("data/main/2022/day2.txt").unwrap();
-    let mut win: WinningStrat = WinningStrat::new();
-    win.insert(Shape::Rock, Shape::Scissors);
-    win.insert(Shape::Scissors, Shape::Paper);
-    win.insert(Shape::Paper, Shape::Rock);
-
     let score = data
         .trim()
         .split("\n")
         .map(|t| t.trim())
         .map(|shapes| shapes.split_once(" ").unwrap())
         .map(|(p0, p1)| (str_to_shape(p0), str_to_shape(p1)))
-        .map(|shapes| score(shapes, &win))
+        .map(|shapes| score(shapes))
         .sum::<usize>();
 
     String::from(format!("{:?}", score))
 }
 
-fn score((p1, p2): (Shape, Shape), winstrat: &WinningStrat) -> usize {
-    if winstrat.get(&p1).unwrap() == &p2 {
-        return p2 as usize;
+fn x_beats(p0: Shape) -> Shape {
+    match p0 {
+        Shape::Rock => Shape::Scissors,
+        Shape::Scissors => Shape::Paper,
+        Shape::Paper => Shape::Rock
     }
-    if p1 == p2 {
-        return (p2 as usize) + 3;
-    }
+}
 
-    p2 as usize + 6
+fn score((p0, p1): (Shape, Shape)) -> usize {
+    match p1 {
+        _ if p1 == p0 => p1 as usize + 3,
+        _ if x_beats(p0) == p1 => p1 as usize,
+        _ => p1 as usize + 6
+    }
 }

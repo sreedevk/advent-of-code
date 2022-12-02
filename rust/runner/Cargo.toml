@@ -17,3 +17,4 @@ solutions-2022 = { path = "../solutions-2022" }
 uint = "0.9.3"
 tokio = { version = "1.21.2", features = ["full"] }
 tl = "0.7.7"
+chrono = { version = "0.4.23", features = ["serde"] }

@@ -1,4 +1,5 @@
 use std::fs;
+use rayon::prelude::*;
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy)]
 #[repr(u8)]
@@ -12,7 +13,7 @@ pub fn solve() -> String {
     let data = fs::read_to_string("data/main/2022/day2.txt").unwrap();
     let score = data
         .trim()
-        .split("\n")
+        .par_split('\n')
         .map(|t| t.trim())
         .map(|shapes| shapes.split_once(" ").unwrap())
         .map(|(p0, outcome)| (str_to_shape(p0), decide_shape(str_to_shape(p0), outcome)))

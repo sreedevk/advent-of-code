@@ -18,7 +18,7 @@ impl Day1 {
                 elf
                     .split("\n")
                     .map(|meal| usize::from_str_radix(meal.trim(), 10).unwrap())
-                    .fold(0, |count, item| count + item)
+                    .sum::<usize>()
             })
             .max();
 

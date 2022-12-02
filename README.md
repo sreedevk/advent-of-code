@@ -29,11 +29,13 @@
 ```
 ##### 2022
 | Year | Day                          | Solution (Ruby)                                                                             |
+| ---- | ----                         | ----                                                                                        |
 | 2021 | 01 (Calorie Counting)        | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/ruby/2022/day1/main.rb)  |
 | 2021 | 02 (Dive!)                   | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/ruby/2022/day2/main.rb)  |
 
 ##### 2021
 | Year | Day                          | Solution (Ruby)                                                                             |
+| ---- | ----                         | ----                                                                                        |
 | 2021 | 01 (Sonar Sweep)             | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/ruby/2021/day1/main.rb)  |
 | 2021 | 02 (Dive!)                   | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/ruby/2021/day2/main.rb)  |
 | 2021 | 03 (Binary Diagnostic)       | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/ruby/2021/day3/main.rb)  |
@@ -62,6 +64,7 @@
 
 ##### 2020
 | Year | Day                          | Solution (Ruby)                                                                             |
+| ---- | ----                         | ----                                                                                        |
 | 2020 | 01 (Report Repair)           | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/ruby/2020/day1/main.rb)  |
 | 2020 | 02 (Password Philosophy)     | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/ruby/2020/day2/main.rb)  |
 | 2020 | 03 (Toboggan Trajectory)     | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/ruby/2020/day3/main.rb)  |

@@ -6,6 +6,8 @@ use std::process::exit;
 #[tokio::main]
 async fn main() {
     let args: Vec<String> = env::args().collect();
+    println!("Advent of code {}, Day {}", args[1], args[2]);
+
     let solution: Option<fn() -> [String; 2]> = match args[1].as_str() {
         "2022" => match args[2].as_str() {
             "1" => Some(solutions_2022::day1::Day1::solve),

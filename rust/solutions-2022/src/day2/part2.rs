@@ -13,7 +13,7 @@ fn decide_shape(p0: Shape, outcome: &str) -> Shape {
        "X" => x_beats(p0),
        "Y" => p0,
        "Z" => beats_y(p0),
-       _ => panic!("INVALID SHAPE")
+       _ => panic!("INVALID OUTCOME")
    }
 }
 

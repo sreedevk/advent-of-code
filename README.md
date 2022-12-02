@@ -61,7 +61,7 @@
 | Year | Day                          | Solution (Rust)                                                                                          |
 | ---- | ----                         | ----                                                                                                     |
 | 2015 | 01 (Not Quite Lisp)          | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/rust/solutions-2015/src/day1/mod.rs)  |
-| 2015 | 07 (Not Quite Lisp)          | *  [solution](https://github.com/sreedevk/advent-of-code/blob/main/rust/solutions-2015/src/day7/mod.rs)  |
+| 2015 | 07 (Some Assembly Required)  | *  [solution](https://github.com/sreedevk/advent-of-code/blob/main/rust/solutions-2015/src/day7/mod.rs)  |
 
 #### Ruby
 

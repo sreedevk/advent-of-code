@@ -8,24 +8,6 @@ enum Shape {
     Scissors = 3,
 }
 
-fn decide_shape(p0: Shape, outcome: &str) -> Shape {
-   match outcome {
-       "X" => x_beats(p0),
-       "Y" => p0,
-       "Z" => beats_y(p0),
-       _ => panic!("INVALID OUTCOME")
-   }
-}
-
-fn str_to_shape(istr: &str) -> Shape {
-    match istr {
-        "A" | "X" => Shape::Rock,
-        "B" | "Y" => Shape::Paper,
-        "C" | "Z" => Shape::Scissors,
-        _ => panic!("INVALID SHAPE"),
-    }
-}
-
 pub fn solve() -> String {
     let data = fs::read_to_string("data/main/2022/day2.txt").unwrap();
     let score = data
@@ -38,6 +20,24 @@ pub fn solve() -> String {
         .sum::<usize>();
 
     String::from(format!("{:?}", score))
+}
+
+fn decide_shape(p0: Shape, outcome: &str) -> Shape {
+   match outcome {
+       "X" => x_beats(p0),
+       "Y" => p0,
+       "Z" => beats_y(p0),
+       _ => panic!("INVALID OUTCOME")
+   }
+}
+
+fn str_to_shape(istr: &str) -> Shape {
+    match istr {
+        "A" => Shape::Rock,
+        "B" => Shape::Paper,
+        "C" => Shape::Scissors,
+        _ => panic!("INVALID SHAPE"),
+    }
 }
 
 fn x_beats(p0: Shape) -> Shape {

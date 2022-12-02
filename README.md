@@ -2,14 +2,14 @@
 
 ![cxud1s5i396p0nrkz2v4](https://user-images.githubusercontent.com/36154121/144250485-dcf907f5-57a8-4137-8e7a-41e0fe89bce3.png)
 
-### Usage
+## Usage
 
 ```bash
   git clone https://github.com/sreedevk/advent-of-code
   cd advent-of-code
 ```
 
-#### Rust
+## Rust
 
 ```bash
   cd rust
@@ -63,7 +63,7 @@
 | 2015 | 01 (Not Quite Lisp)          | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/rust/solutions-2015/src/day1/mod.rs)  |
 | 2015 | 07 (Some Assembly Required)  | *  [solution](https://github.com/sreedevk/advent-of-code/blob/main/rust/solutions-2015/src/day7/mod.rs)  |
 
-#### Ruby
+## Ruby
 
 ```bash
   cd ruby
@@ -137,7 +137,7 @@
 | 2020 | 24 (Lobby Layout)            |                                                                                                          |
 | 2020 | 25 (Combo Breaker)           |                                                                                                          |
 
-#### Elixir
+## Elixir
 
 ```bash
   mix aoc authenticate <cookie>          # add browser cookie for problem fetching from adventofcode.com
@@ -207,5 +207,3 @@
 | 2020 | 23 (Crab Cups)               |                                                                                                          |
 | 2020 | 24 (Lobby Layout)            |                                                                                                          |
 | 2020 | 25 (Combo Breaker)           |                                                                                                          |
-
-

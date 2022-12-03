@@ -1,3 +1,0 @@
-#!/usr/bin/bash
-
-cargo run --release --quiet solve 2022 3

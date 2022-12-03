@@ -1,3 +1,0 @@
-#!/usr/bin/bash
-
-cargo run --release fetch 2022 3

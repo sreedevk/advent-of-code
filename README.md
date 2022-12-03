@@ -23,6 +23,7 @@
 | ---- | ----                         | ----                                                                                                     |
 | 2022 | 01 (Calorie Counting)        | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/rust/solutions-2022/src/day1/mod.rs)  |
 | 2022 | 02 (Rock Paper Scissors)     | ** [solution](https://github.com/sreedevk/advent-of-code/tree/main/rust/solutions-2022/src/day2)         |
+| 2022 | 03 (Rucksack Reorganization) | ** [solution](https://github.com/sreedevk/advent-of-code/tree/main/rust/solutions-2022/src/day3)         |
 
 ##### 2021
 | Year | Day                          | Solution (Rust)                                                                                         |

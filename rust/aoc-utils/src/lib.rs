@@ -27,7 +27,7 @@ impl Aoc {
 
     pub async fn scaffold(year: &str, day: &str) {
         if Path::new(format!("solutions-{}/src/day{}/mod.rs", year, day).as_str()).exists() {
-            println!("already exists: {}", format!("solutions-{}/src/day{}/mod.rs", year, day));
+            println!("already exists: solutions-{}/src/day{}/mod.rs", year, day);
             return;
         }
 
@@ -42,16 +42,10 @@ impl Aoc {
 
         let solutions_mod_incl = format!("pub mod day{};", day);
 
-        println!(
-            "create dir: {}",
-            format!("solutions-{}/src/day{}/", year, day)
-        );
+        println!("create dir: solutions-{}/src/day{}/", year, day);
         fs::create_dir_all(format!("solutions-{}/src/day{}/", year, day)).unwrap();
 
-        println!(
-            "creating: {}",
-            format!("solutions-{}/src/day{}/mod.rs", year, day)
-        );
+        println!("creating: solutions-{}/src/day{}/mod.rs", year, day);
         fs::write(
             format!("solutions-{}/src/day{}/mod.rs", year, day),
             raw_template,
@@ -69,8 +63,8 @@ impl Aoc {
         let client = reqwest::Client::builder().build().unwrap();
 
         println!(
-            "fetching: {}",
-            format!("https://adventofcode.com/{}/day/{}/input", year, day)
+            "fetching: https://adventofcode.com/{}/day/{}/input",
+            year, day
         );
 
         let input_response = client
@@ -89,10 +83,10 @@ impl Aoc {
         fs::create_dir_all(format!("data/main/{}", year)).unwrap();
 
         /* write input data*/
-        println!("writing: {}", format!("data/main/{}/day{}.txt", year, day));
+        println!("writing: data/main/{}/day{}.txt", year, day);
         fs::write(format!("data/main/{}/day{}.txt", year, day), &input).unwrap();
 
-        println!("writing: {}", format!("data/example/{}/day{}.txt", year, day));
+        println!("writing: data/example/{}/day{}.txt", year, day);
         fs::write(format!("data/example/{}/day{}.txt", year, day), &input).unwrap();
     }
 }

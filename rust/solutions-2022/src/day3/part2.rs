@@ -10,7 +10,7 @@ fn to_priority(input: char) -> usize {
 }
 
 fn three_way(a: &[usize], b: &[usize], c: &[usize]) -> usize {
-    *a.into_iter()
+    *a.iter()
         .find(|x| b.contains(x) && c.contains(x))
         .unwrap()
 }

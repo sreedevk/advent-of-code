@@ -6,8 +6,19 @@ use std::path::Path;
 pub struct Aoc;
 
 impl Aoc {
+    pub async fn submit(year: &str, day: &str, part: &str, solution: &str) {
+        let params = [("level", part), ("answer", solution)];
+        let client = reqwest::Client::new();
+
+        client.post(format!("https://adventofcode.com/{}/day/{}/answer", year, day))
+            .form(&params)
+            .send()
+            .await
+            .unwrap();
+    }
+
     pub async fn scaffold(year: &str, day: &str) {
-        if Path::new("").exists() { return }
+        if Path::new(format!("solutions-{}/src/day{}/mod.rs", year, day).as_str()).exists() { return }
 
         let raw_template = fs::read_to_string("templates/solution_template.rs")
             .expect("unable to find template")

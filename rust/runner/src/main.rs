@@ -35,16 +35,33 @@ async fn main() {
         "fetch" => {
             Aoc::fetch(&args[2], &args[3]).await;
             exit(0)
-        },
+        }
         "scaffold" => {
             Aoc::scaffold(&args[2], &args[3]).await;
             exit(0)
-        },
+        }
         _ => None,
     };
 
     match solution {
-        Some(soln) => solver(soln),
+        Some(soln) => {
+            if args[1] == "submit" {
+                let [solution1, solution2] = soln();
+                match args[4].as_str() {
+                    "1" => {
+                        Aoc::submit(args[2].as_str(), args[3].as_str(), "1", solution1.as_str())
+                            .await
+                    }
+                    "2" => {
+                        Aoc::submit(args[2].as_str(), args[3].as_str(), "2", solution2.as_str())
+                            .await
+                    },
+                    _ => panic!("Invalid Part Identifier")
+                }
+            } else {
+                solver(soln)
+            }
+        }
         None => println!("Solution not found!"),
     }
 }
@@ -65,6 +82,9 @@ fn solver(func: fn() -> [String; 2]) {
     } else if duration.num_milliseconds() > 0 {
         println!("Solution took {:?} ms", duration.num_milliseconds())
     } else {
-        println!("Solution took {:?} µs", duration.num_microseconds().unwrap())
+        println!(
+            "Solution took {:?} µs",
+            duration.num_microseconds().unwrap()
+        )
     }
 }

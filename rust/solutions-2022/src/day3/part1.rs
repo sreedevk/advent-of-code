@@ -2,7 +2,7 @@ use itertools::Itertools;
 use std::fs;
 
 fn intersection((a, b): (&[usize], &[usize])) -> usize {
-    *a.into_iter().find(|x| b.contains(x)).unwrap()
+    *a.iter().find(|x| b.contains(x)).unwrap()
 }
 
 pub fn solve() -> String {

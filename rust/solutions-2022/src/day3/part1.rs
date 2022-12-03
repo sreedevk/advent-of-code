@@ -1,12 +1,5 @@
+use itertools::Itertools;
 use std::fs;
-
-fn to_priority(input: char) -> usize {
-    if input.is_uppercase() {
-        (input as usize) - 38
-    } else {
-        (input as usize) - 96
-    }
-}
 
 fn intersection((a, b): (&[usize], &[usize])) -> usize {
     *a.into_iter().find(|x| b.contains(x)).unwrap()
@@ -18,7 +11,8 @@ pub fn solve() -> String {
         .trim()
         .split('\n')
         .into_iter()
-        .map(|sack| sack.trim().chars().map(to_priority).collect::<Vec<usize>>())
+        .map(|sack| sack.trim().chars())
+        .map(|sack| sack.map(super::to_priority).collect_vec())
         .map(|x| intersection(x.split_at(x.len() / 2)))
         .sum::<usize>();
 

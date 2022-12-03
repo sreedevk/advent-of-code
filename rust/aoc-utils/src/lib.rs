@@ -10,11 +10,16 @@ impl Aoc {
         let params = [("level", part), ("answer", solution)];
         let client = reqwest::Client::new();
 
-        client.post(format!("https://adventofcode.com/{}/day/{}/answer", year, day))
+        let response = client.post(format!("https://adventofcode.com/{}/day/{}/answer", year, day))
             .form(&params)
             .send()
             .await
+            .unwrap()
+            .text()
+            .await
             .unwrap();
+
+        println!("{}", response);
     }
 
     pub async fn scaffold(year: &str, day: &str) {

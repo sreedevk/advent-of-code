@@ -23,10 +23,8 @@ pub fn solve() -> String {
         .map(|sack| sack.trim().chars().map(to_priority).collect::<Vec<usize>>())
         .chunks(3)
         .into_iter()
-        .map(|chunk| {
-            let elfchunk = chunk.collect_vec();
-            three_way(&elfchunk[0], &elfchunk[1], &elfchunk[2])
-        })
+        .map(|chunk| chunk.collect_vec())
+        .map(|chunk| three_way(&chunk[0], &chunk[1], &chunk[2]))
         .sum::<usize>();
 
     format!("{}", priorities_sum)

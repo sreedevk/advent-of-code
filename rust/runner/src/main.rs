@@ -43,8 +43,7 @@ async fn submit_solution(func: fn() -> [String; 2], args: Vec<String>) {
 }
 
 fn find_solution(year: &str, day: &str) -> Option<fn() -> [String; 2]> {
-    println!("Advent of code {}, Day {}", year, day);
-
+    println!("🎄 Advent of code {} 🎄 Day {}", year, day);
     match year {
         "2022" => match day {
             "1" => Some(solutions_2022::day1::Day1::solve),

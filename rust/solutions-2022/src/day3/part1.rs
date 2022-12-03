@@ -8,8 +8,8 @@ fn to_priority(input: char) -> usize {
     }
 }
 
-fn intersection(a: Vec<usize>, b: Vec<usize>) -> usize {
-    a.into_iter().find(|x| b.contains(x)).unwrap()
+fn intersection(a: &[usize], b: &[usize]) -> usize {
+    *a.into_iter().find(|x| b.contains(x)).unwrap()
 }
 
 pub fn solve() -> String {
@@ -23,7 +23,7 @@ pub fn solve() -> String {
         .into_iter()
         .map(|x| {
             let (a, b) = x.split_at(x.len() / 2);
-            intersection(a.to_owned(), b.to_owned())
+            intersection(&a, &b)
         })
         .sum::<usize>();
 

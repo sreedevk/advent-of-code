@@ -6,6 +6,8 @@ use std::process::exit;
 #[tokio::main]
 async fn main() {
     let args: Vec<String> = env::args().collect();
+    print_intro(&args[2], &args[3]);
+
     match args[1].as_str() {
         "fetch" => {
             Aoc::fetch(&args[2], &args[3]).await;
@@ -33,6 +35,12 @@ async fn main() {
     };
 }
 
+fn print_intro(year: &str, day: &str) {
+    println!("------------------------------------------------");
+    println!("🎄 Advent of code {} 🎄 Day {}", year, day);
+    println!("------------------------------------------------\n");
+}
+
 async fn submit_solution(func: fn() -> [String; 2], args: Vec<String>) {
     let [solution1, solution2] = func();
     match args[4].as_str() {
@@ -43,7 +51,6 @@ async fn submit_solution(func: fn() -> [String; 2], args: Vec<String>) {
 }
 
 fn find_solution(year: &str, day: &str) -> Option<fn() -> [String; 2]> {
-    println!("🎄 Advent of code {} 🎄 Day {}", year, day);
     match year {
         "2022" => match day {
             "1" => Some(solutions_2022::day1::Day1::solve),
@@ -86,17 +93,21 @@ fn print_solution(solution: [String; 2]) {
         .into_iter()
         .enumerate()
         .for_each(|(i, soln)| println!("PART {}: {}", i, soln));
+
+    println!("\n------------------------------------------------");
 }
 
 fn print_benchmarks(duration: chrono::Duration) {
     if duration.num_seconds() > 0 {
-        println!("Solution took {:?} seconds", duration.num_seconds())
+        println!("exec time: {:?} seconds", duration.num_seconds())
     } else if duration.num_milliseconds() > 0 {
-        println!("Solution took {:?} ms", duration.num_milliseconds())
-    } else {
+        println!("exec time: {:?} ms", duration.num_milliseconds())
+    } else if duration.num_microseconds().unwrap() > 10 {
         println!(
-            "Solution took {:?} µs",
+            "exec time: {:?} µs",
             duration.num_microseconds().unwrap()
         )
+    } else {
+        println!("exec time: {:?} ns", duration.num_nanoseconds().unwrap())
     }
 }

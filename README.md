@@ -12,11 +12,12 @@
 ## Rust
 
 ```bash
-  cd rust
-  cargo run --release 2021 12 # run solution for 2021 day 12 (part 1 & 2)
-  cargo run --release fetch 2021 12 # !will reset the solution file & update the example + data files
+  cd rust/
+  cargo run --release solve 2021 12     # run solution for 2021 day 12 (part 1 & 2)
+  cargo run --release fetch 2021 12     # fetch & write input data
+  cargo run --release submit 2021 12 1  # submit solution for 2021 day 12 part 1 to adventofcode.com
+  cargo run --release scaffold 2021 12  # create solution file for 2021 day 12
 ```
-
 ##### 2022
 | Year | Day                          | Solution (Rust)                                                                                          |
 | ---- | ----                         | ----                                                                                                     |

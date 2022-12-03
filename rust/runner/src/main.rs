@@ -35,13 +35,17 @@ async fn main() {
         "fetch" => {
             Aoc::fetch(&args[2], &args[3]).await;
             exit(0)
-        }
+        },
+        "scaffold" => {
+            Aoc::scaffold(&args[2], &args[3]).await;
+            exit(0)
+        },
         _ => None,
     };
 
     match solution {
         Some(soln) => solver(soln),
-        None => println!("SOLUTION NOT FOUND"),
+        None => println!("Solution not found!"),
     }
 }
 

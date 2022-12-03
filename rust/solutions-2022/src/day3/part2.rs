@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use std::{collections::HashSet, fs};
+use std::fs;
 
 fn to_priority(input: char) -> usize {
     if input.is_uppercase() {
@@ -9,12 +9,8 @@ fn to_priority(input: char) -> usize {
     }
 }
 
-fn intersection(a: Vec<usize>, b: Vec<usize>) -> usize {
-    a.into_iter().find(|x| b.contains(x)).unwrap()
-}
-
-fn three_way(a: Vec<usize>, b: Vec<usize>, c: Vec<usize>) -> usize {
-    a.into_iter()
+fn three_way(a: &[usize], b: &[usize], c: &[usize]) -> usize {
+    *a.into_iter()
         .find(|x| b.contains(x) && c.contains(x))
         .unwrap()
 }
@@ -29,7 +25,7 @@ pub fn solve() -> String {
         .into_iter()
         .map(|chunk| {
             let elfchunk = chunk.collect_vec();
-            three_way(elfchunk[0].to_owned(), elfchunk[1].to_owned(), elfchunk[2].to_owned())
+            three_way(&elfchunk[0], &elfchunk[1], &elfchunk[2])
         })
         .sum::<usize>();
 

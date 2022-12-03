@@ -1,5 +1,4 @@
-use std::{collections::HashSet, fs};
-use itertools::Itertools;
+use std::fs;
 
 fn to_priority(input: char) -> usize {
     if input.is_uppercase() {

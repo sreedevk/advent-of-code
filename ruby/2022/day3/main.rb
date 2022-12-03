@@ -12,7 +12,7 @@ class RucksackReorganization
     @data
       .map { |x| x.each_slice(x.size / 2) }
       .map { |x| x.reduce(&:&).first }
-      .map { |x| /[[:upper:]]/.match(x) ? (x.ord - 38) : (x.ord - 96) }
+      .map { |x| x.ord - (/[[:upper:]]/ =~ x ? 38 : 96) }
       .sum
   end
 

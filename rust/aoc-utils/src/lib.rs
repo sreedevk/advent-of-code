@@ -27,6 +27,7 @@ impl Aoc {
 
     pub async fn scaffold(year: &str, day: &str) {
         if Path::new(format!("solutions-{}/src/day{}/mod.rs", year, day).as_str()).exists() {
+            println!("already exists: {}", format!("solutions-{}/src/day{}/mod.rs", year, day));
             return;
         }
 

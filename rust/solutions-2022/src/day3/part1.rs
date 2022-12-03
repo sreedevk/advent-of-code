@@ -19,8 +19,6 @@ pub fn solve() -> String {
         .split('\n')
         .into_iter()
         .map(|sack| sack.trim().chars().map(to_priority).collect::<Vec<usize>>())
-        .collect::<Vec<Vec<usize>>>()
-        .into_iter()
         .map(|x| {
             let (a, b) = x.split_at(x.len() / 2);
             intersection(&a, &b)

@@ -82,6 +82,7 @@
 | 2022 | 01 (Calorie Counting)        | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/ruby/2022/day1/main.rb)               |
 | 2022 | 02 (Rock Paper Scissors)     | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/ruby/2022/day2/main.rb)               |
 | 2022 | 03 (Rucksack Reorganization) | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/ruby/2022/day3/main.rb)               |
+| 2022 | 04 (Camp Cleanup)            | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/ruby/2022/day4/main.rb)               |
 
 ##### 2021
 | Year | Day                          | Solution (Ruby)                                                                                          |

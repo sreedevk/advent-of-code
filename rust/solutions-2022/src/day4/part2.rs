@@ -2,11 +2,10 @@ use itertools::Itertools;
 use std::fs;
 
 fn rangeize(elf: &str) -> (usize, usize) {
-    let (low, high) = elf.split('-').collect_tuple().unwrap();
-    (
-        low.parse::<usize>().unwrap(),
-        high.parse::<usize>().unwrap(),
-    )
+    elf.split('-')
+        .map(|rawstr| rawstr.parse::<usize>().unwrap())
+        .collect_tuple()
+        .unwrap()
 }
 
 fn overlaps(a: (usize, usize), b: (usize, usize)) -> bool {

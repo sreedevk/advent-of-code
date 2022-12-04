@@ -20,6 +20,7 @@ async fn main() {
         "solve" => {
             let solution = find_solution(&args[2], &args[3]);
             if solution.is_none() {
+                println!("404: SOLUTION NOT FOUND");
                 exit(0)
             }
             run_solution(solution.unwrap());
@@ -44,8 +45,12 @@ fn print_intro(year: &str, day: &str) {
 async fn submit_solution(func: fn() -> [String; 2], args: Vec<String>) {
     let [solution1, solution2] = func();
     match args[4].as_str() {
-        "1" => Aoc::submit(args[2].as_str(), args[3].as_str(), "1", solution1.as_str()).await,
-        "2" => Aoc::submit(args[2].as_str(), args[3].as_str(), "2", solution2.as_str()).await,
+        "1" | "01" => {
+            Aoc::submit(args[2].as_str(), args[3].as_str(), "1", solution1.as_str()).await
+        }
+        "2" | "02" => {
+            Aoc::submit(args[2].as_str(), args[3].as_str(), "2", solution2.as_str()).await
+        }
         _ => panic!("Invalid Part Identifier"),
     }
 }
@@ -53,27 +58,28 @@ async fn submit_solution(func: fn() -> [String; 2], args: Vec<String>) {
 fn find_solution(year: &str, day: &str) -> Option<fn() -> [String; 2]> {
     match year {
         "2022" => match day {
-            "1" => Some(solutions_2022::day1::Day1::solve),
-            "2" => Some(solutions_2022::day2::Day2::solve),
-            "3" => Some(solutions_2022::day3::Day3::solve),
-            "4" => Some(solutions_2022::day4::Day4::solve),
+            "1" | "01" => Some(solutions_2022::day1::Day1::solve),
+            "2" | "02" => Some(solutions_2022::day2::Day2::solve),
+            "3" | "03" => Some(solutions_2022::day3::Day3::solve),
+            "4" | "04" => Some(solutions_2022::day4::Day4::solve),
+            "5" | "05" => Some(solutions_2022::day5::Day5::solve),
             _ => None,
         },
         "2021" => match day {
-            "1" => Some(solutions_2021::day1::Day1::solve),
-            "2" => Some(solutions_2021::day2::Day2::solve),
-            "3" => Some(solutions_2021::day3::Day3::solve),
+            "1" | "01" => Some(solutions_2021::day1::Day1::solve),
+            "2" | "02" => Some(solutions_2021::day2::Day2::solve),
+            "3" | "03" => Some(solutions_2021::day3::Day3::solve),
             "12" => Some(solutions_2021::day12::Day12::solve),
             "13" => Some(solutions_2021::day13::Day13::solve),
             _ => None,
         },
         "2018" => match day {
-            "3" => Some(solutions_2018::day3::Day3::solve),
+            "3" | "03" => Some(solutions_2018::day3::Day3::solve),
             _ => None,
         },
         "2015" => match day {
-            "1" => Some(solutions_2015::day1::Day1::solve),
-            "7" => Some(solutions_2015::day7::Day7::solve),
+            "1" | "01" => Some(solutions_2015::day1::Day1::solve),
+            "7" | "07" => Some(solutions_2015::day7::Day7::solve),
             _ => None,
         },
         _ => None,
@@ -104,10 +110,7 @@ fn print_benchmarks(duration: chrono::Duration) {
     } else if duration.num_milliseconds() > 0 {
         println!("exec time: {:?} ms", duration.num_milliseconds())
     } else if duration.num_microseconds().unwrap() > 10 {
-        println!(
-            "exec time: {:?} µs",
-            duration.num_microseconds().unwrap()
-        )
+        println!("exec time: {:?} µs", duration.num_microseconds().unwrap())
     } else {
         println!("exec time: {:?} ns", duration.num_nanoseconds().unwrap())
     }

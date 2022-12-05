@@ -78,12 +78,10 @@ fn gen_instructions(raw: &str) -> Vec<Instruction> {
 }
 
 fn process_instruction(i: Instruction, crates: Vec<Vec<String>>) -> Vec<Vec<String>> {
-    dbg!(&crates, &i);
     let mut new_crates = crates.clone();
     let (kept, removed) = crates[i.from - 1].split_at(crates[i.from - 1].len() - i.count);
     new_crates[i.from - 1] = kept.to_vec();
-    new_crates[i.to - 1].extend(removed.to_vec());
-
+    new_crates[i.to - 1].extend(removed.to_vec().into_iter().rev());
     new_crates
 }
 
@@ -113,7 +111,7 @@ fn gen_crates(raw: &str) -> Vec<Vec<String>> {
 }
 
 pub fn solve() -> String {
-    let raw = fs::read_to_string("data/example/2022/day5.txt").unwrap();
+    let raw = fs::read_to_string("data/main/2022/day5.txt").unwrap();
     let (raw_crates, raw_instructions) = raw.split_once("\n\n").unwrap();
     let result: Vec<Vec<String>> = gen_instructions(raw_instructions)
         .into_iter()
@@ -121,5 +119,5 @@ pub fn solve() -> String {
             process_instruction(instr, acc)
         });
 
-    format!("{:?}", result)
+    format!("{:?}", result.into_iter().map(|x| x.last().unwrap().clone()).collect_vec())
 }

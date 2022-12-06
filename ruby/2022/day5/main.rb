@@ -8,28 +8,28 @@ class SupplyStacks
 
   def solve1
     parse_instructions(@data[1])
-      .reduce(parse_stacks(@data[0])) { process_instruction_9000(_2, _1) }
+      .reduce(parse_stacks(@data[0]), &method(:process_instruction_9000))
       .map(&:last)
       .join
   end
 
   def solve2
     parse_instructions(@data[1])
-      .reduce(parse_stacks(@data[0])) { process_instruction_9001(_2, _1) }
+      .reduce(parse_stacks(@data[0]), &method(:process_instruction_9001))
       .map(&:last)
       .join
   end
 
   private
 
-  def process_instruction_9000(instruction, stack)
+  def process_instruction_9000(stack, instruction)
     stack.tap do |stk|
       stk[instruction[:to]]
         .push(*stk[instruction[:from]].pop(instruction[:count]).reverse)
     end
   end
 
-  def process_instruction_9001(instruction, stack)
+  def process_instruction_9001(stack, instruction)
     stack.tap do |stk|
       stk[instruction[:to]]
         .push(*stk[instruction[:from]].pop(instruction[:count]))

@@ -47,7 +47,7 @@ class SupplyStacks
     stacks
       .lines
       .map { |line| line.chars.each_slice(4).map(&:join).map(&:strip) }
-      .slice(0..-2)
+      .slice(..-2)
       .transpose
       .map(&:reverse)
       .map { |stack| stack.reject(&:empty?).map { _1.tr('[]', '') } }

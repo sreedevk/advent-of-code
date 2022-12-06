@@ -8,14 +8,14 @@ class SupplyStacks
 
   def solve1
     parse_instructions(@data[1])
-      .reduce(parse_stacks(@data[0])) { |stx, inst| process_instruction_9000(inst, stx) }
+      .reduce(parse_stacks(@data[0])) { process_instruction_9000(_2, _1) }
       .map(&:last)
       .join
   end
 
   def solve2
     parse_instructions(@data[1])
-      .reduce(parse_stacks(@data[0])) { |stx, inst| process_instruction_9001(inst, stx) }
+      .reduce(parse_stacks(@data[0])) { process_instruction_9001(_2, _1) }
       .map(&:last)
       .join
   end

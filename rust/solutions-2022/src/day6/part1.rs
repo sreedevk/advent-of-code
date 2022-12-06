@@ -7,20 +7,17 @@ fn all_unique(chrs: Vec<char>) -> bool {
 
 pub fn solve() -> String {
     let raw = fs::read_to_string("data/main/2022/day6.txt").unwrap();
-    let results = raw
+    let init = raw
         .chars()
-        .collect_vec()
+        .collect_vec();
+
+    let results = init
         .windows(4)
         .into_iter()
         .enumerate()
-        .filter_map(|(index, chars)| {
-            if all_unique(chars.to_vec()) {
-                Some(index + 4)
-            } else {
-                None
-            }
-        })
+        .take_while(|(_, chars)| !all_unique(chars.to_vec()) )
         .collect_vec();
 
-    format!("{}", results.get(0).unwrap())
+    let (result, _) = results.last().unwrap();
+    format!("{}", result + 5)
 }

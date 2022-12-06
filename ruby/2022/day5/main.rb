@@ -24,15 +24,15 @@ class SupplyStacks
 
   def process_instruction_9000(instruction, stack)
     stack.tap do |stk|
-      stk[instruction[:to] - 1]
-        .push(*stk[instruction[:from] - 1].pop(instruction[:count]).reverse)
+      stk[instruction[:to]]
+        .push(*stk[instruction[:from]].pop(instruction[:count]).reverse)
     end
   end
 
   def process_instruction_9001(instruction, stack)
     stack.tap do |stk|
-      stk[instruction[:to] - 1]
-        .push(*stk[instruction[:from] - 1].pop(instruction[:count]))
+      stk[instruction[:to]]
+        .push(*stk[instruction[:from]].pop(instruction[:count]))
     end
   end
 
@@ -40,7 +40,7 @@ class SupplyStacks
     instructions
       .lines
       .map { |line| line.match(/move\s(?<count>\d+)\sfrom\s(?<from>\d+)\sto\s(?<to>\d+)/) }
-      .map { |line| { count: line[:count].to_i, from: line[:from].to_i, to: line[:to].to_i } }
+      .map { |line| { count: line[:count].to_i, from: line[:from].to_i.pred, to: line[:to].to_i.pred } }
   end
 
   def parse_stacks(stacks)

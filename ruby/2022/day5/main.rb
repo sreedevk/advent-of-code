@@ -8,17 +8,31 @@ class SupplyStacks
 
   def solve1
     parse_instructions(@data[1])
-      .reduce(parse_stacks(@data[0])) { |stx, inst| process_instruction(inst, stx) }
+      .reduce(parse_stacks(@data[0])) { |stx, inst| process_instruction_9000(inst, stx) }
+      .map(&:last)
+      .join
+  end
+
+  def solve2
+    parse_instructions(@data[1])
+      .reduce(parse_stacks(@data[0])) { |stx, inst| process_instruction_9001(inst, stx) }
       .map(&:last)
       .join
   end
 
   private
 
-  def process_instruction(instruction, stack)
+  def process_instruction_9000(instruction, stack)
     stack.tap do |stk|
       stk[instruction[:to] - 1]
         .push(*stk[instruction[:from] - 1].pop(instruction[:count]).reverse)
+    end
+  end
+
+  def process_instruction_9001(instruction, stack)
+    stack.tap do |stk|
+      stk[instruction[:to] - 1]
+        .push(*stk[instruction[:from] - 1].pop(instruction[:count]))
     end
   end
 
@@ -42,3 +56,4 @@ end
 
 solver = SupplyStacks.new(ARGF.read)
 pp "PART 1: #{solver.solve1}"
+pp "PART 2: #{solver.solve2}"

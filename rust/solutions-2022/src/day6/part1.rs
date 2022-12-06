@@ -1,5 +1,5 @@
-use std::fs;
 use itertools::Itertools;
+use std::fs;
 
 fn all_unique(chrs: Vec<char>) -> bool {
     chrs == chrs.clone().into_iter().unique().collect_vec()
@@ -13,7 +13,13 @@ pub fn solve() -> String {
         .windows(4)
         .into_iter()
         .enumerate()
-        .filter_map(|(index, chars)| { if all_unique(chars.to_vec()) { Some(index + 4) } else { None } })
+        .filter_map(|(index, chars)| {
+            if all_unique(chars.to_vec()) {
+                Some(index + 4)
+            } else {
+                None
+            }
+        })
         .collect_vec();
 
     format!("{}", results.get(0).unwrap())

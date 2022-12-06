@@ -63,6 +63,7 @@ fn find_solution(year: &str, day: &str) -> Option<fn() -> [String; 2]> {
             "3" | "03" => Some(solutions_2022::day3::Day3::solve),
             "4" | "04" => Some(solutions_2022::day4::Day4::solve),
             "5" | "05" => Some(solutions_2022::day5::Day5::solve),
+            "6" | "06" => Some(solutions_2022::day6::Day6::solve),
             _ => None,
         },
         "2021" => match day {

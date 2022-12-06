@@ -119,5 +119,11 @@ pub fn solve() -> String {
             process_instruction(instr, acc)
         });
 
-    format!("{:?}", result.into_iter().map(|x| x.last().unwrap().clone()).collect_vec())
+    format!(
+        "{:?}",
+        result
+            .into_iter()
+            .map(|x| x.last().unwrap().clone())
+            .collect_vec()
+    )
 }

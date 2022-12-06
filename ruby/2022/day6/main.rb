@@ -10,18 +10,18 @@ class TuningTrouble
     @data
       .chars
       .each_cons(4)
-      .filter_map
-      .with_index { |chset, index| index + 4 if chset == chset.uniq }
-      .first
+      .with_index
+      .take_while { _1 != _1.uniq }
+      .last[-1] + 5
   end
 
   def solve2
     @data
       .chars
       .each_cons(14)
-      .filter_map
-      .with_index { |chset, index| index + 14 if chset == chset.uniq }
-      .first
+      .with_index
+      .take_while { _1 != _1.uniq }
+      .last[-1] + 15
   end
 end
 

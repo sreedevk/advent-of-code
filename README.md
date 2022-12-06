@@ -25,6 +25,8 @@
 | 2022 | 02 (Rock Paper Scissors)     | ** [solution](https://github.com/sreedevk/advent-of-code/tree/main/rust/solutions-2022/src/day2)         |
 | 2022 | 03 (Rucksack Reorganization) | ** [solution](https://github.com/sreedevk/advent-of-code/tree/main/rust/solutions-2022/src/day3)         |
 | 2022 | 04 (Camp Cleanup)            | ** [solution](https://github.com/sreedevk/advent-of-code/tree/main/rust/solutions-2022/src/day4)         |
+| 2022 | 05 (Supply Stacks)           | ** [solution](https://github.com/sreedevk/advent-of-code/tree/main/rust/solutions-2022/src/day5)         |
+| 2022 | 06 (Tuning Trouble)          | ** [solution](https://github.com/sreedevk/advent-of-code/tree/main/rust/solutions-2022/src/day6)         |
 
 ##### 2021
 | Year | Day                          | Solution (Rust)                                                                                         |
@@ -83,6 +85,8 @@
 | 2022 | 02 (Rock Paper Scissors)     | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/ruby/2022/day2/main.rb)               |
 | 2022 | 03 (Rucksack Reorganization) | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/ruby/2022/day3/main.rb)               |
 | 2022 | 04 (Camp Cleanup)            | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/ruby/2022/day4/main.rb)               |
+| 2022 | 05 (Supply Stacks)           | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/ruby/2022/day5/main.rb)         |
+| 2022 | 06 (Tuning Trouble)          | ** [solution](https://github.com/sreedevk/advent-of-code/blob/main/ruby/2022/day6/main.rb)         |
 
 ##### 2021
 | Year | Day                          | Solution (Ruby)                                                                                          |

@@ -11,7 +11,7 @@ async fn main() {
     match args[1].as_str() {
         "fetch" => {
             Aoc::fetch(&args[2], &args[3]).await;
-            exit(0);
+            exit(0)
         }
         "scaffold" => {
             Aoc::scaffold(&args[2], &args[3]).await;

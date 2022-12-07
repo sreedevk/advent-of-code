@@ -1,20 +1,13 @@
-#![allow(unused)]
-#![feature(slice_take)]
-
 use std::str;
 
 use nom::{
-    branch::alt,
-    bytes::complete::{is_a, tag, take_while},
-    character::complete::{alpha0, digit0, space0},
+    bytes::complete::tag,
+    character::complete::{digit0, space0},
     combinator::map,
     sequence::tuple,
-    Finish, IResult,
+    IResult,
 };
-use std::char;
 use std::fs;
-use std::io::BufRead;
-
 use itertools::Itertools;
 
 #[derive(Debug)]

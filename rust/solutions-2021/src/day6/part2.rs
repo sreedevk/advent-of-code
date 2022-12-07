@@ -3,6 +3,16 @@ use itertools::Itertools;
 use std::fs;
 use tap::prelude::*;
 
+pub fn solve() -> String {
+    fs::read_to_string("data/main/2021/day6.txt")
+        .unwrap()
+        .pipe(|input| parse_input(input.as_str()))
+        .pipe(|input| tally(input))
+        .pipe(|input| step_gen(input, 256, 1))
+        .pipe(|input| input.values().sum::<usize>())
+        .pipe(|solution| format!("{}", solution))
+}
+
 fn step_gen(state: FishCounter, max_gens: usize, current_gen: usize) -> FishCounter {
     if current_gen > max_gens {
         return state;
@@ -47,14 +57,4 @@ fn parse_input(input: &str) -> Vec<usize> {
         .split(',')
         .map(|num| num.parse::<usize>().unwrap())
         .collect_vec()
-}
-
-pub fn solve() -> String {
-    fs::read_to_string("data/main/2021/day6.txt")
-        .unwrap()
-        .pipe(|input| parse_input(input.as_str()))
-        .pipe(|input| tally(input))
-        .pipe(|input| step_gen(input, 256, 1))
-        .pipe(|input| input.values().sum::<usize>())
-        .pipe(|solution| format!("{}", solution))
 }

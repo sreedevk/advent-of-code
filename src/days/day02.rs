@@ -11,7 +11,7 @@ const EXAMPLE: &str = include_str!("../../data/day02_example.txt");
 
 pub struct Day02;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
 enum Cube {
     Red(u32),
     Blue(u32),
@@ -34,16 +34,38 @@ struct Config {
 
 impl Game {
     pub fn is_valid(&self, config: Config) -> bool {
-        self.sets.clone().into_iter().filter(|cubes| {
-            cubes.into_iter().any(|cube| {
-                match cube {
+        self.sets
+            .clone()
+            .into_iter()
+            .filter(|cubes| {
+                cubes.into_iter().any(|cube| match cube {
                     Cube::Green(count) => count.gt(&config.green),
                     Cube::Red(count) => count.gt(&config.red),
                     Cube::Blue(count) => count.gt(&config.blue),
                     _ => false,
-                }
+                })
             })
-        }).count() == 0
+            .count()
+            .eq(&0)
+    }
+
+    pub fn min_cubes(&self) -> u32 {
+        Ok::<(u32, u32, u32), anyhow::Error>(self.sets.iter().fold(
+            (0, 0, 0),
+            |(max_red, max_blue, max_green), cubes| {
+                cubes.iter().fold(
+                    (max_red, max_blue, max_green),
+                    |(red, blue, green), cube| match cube {
+                        Cube::Red(x) => (red.max(*x), blue, green),
+                        Cube::Blue(x) => (red, blue.max(*x), green),
+                        Cube::Green(x) => (red, blue, green.max(*x)),
+                        _ => (red, blue, green),
+                    },
+                )
+            },
+        ))
+        .map(|(max_red, max_blue, max_green)| max_red * max_blue * max_green)
+        .unwrap_or(0)
     }
 }
 
@@ -62,7 +84,6 @@ mod parser {
     use anyhow::Result;
 
     impl Parser {
-        // Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
         pub fn games(input: &str) -> IResult<&str, Vec<Game>> {
             map_res(
                 many1(tuple((Self::game_id, many1(Self::game_set)))),
@@ -120,8 +141,8 @@ use parser::Parser;
 
 impl Solution for Day02 {
     fn solve_part1(&self) -> Result<String> {
-        Ok(Parser::games(DATA)?
-            .1
+        Ok(Parser::games(DATA)
+            .map(|(_, parsed)| parsed)?
             .into_iter()
             .filter(|game| {
                 game.is_valid(Config {
@@ -136,6 +157,11 @@ impl Solution for Day02 {
     }
 
     fn solve_part2(&self) -> Result<String> {
-        Ok(String::new())
+        Ok(Parser::games(DATA)
+            .map(|(_, parsed)| parsed)?
+            .into_iter()
+            .map(|game| game.min_cubes())
+            .sum::<u32>()
+            .to_string())
     }
 }

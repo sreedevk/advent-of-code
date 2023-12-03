@@ -5,6 +5,7 @@ pub mod day04;
 pub mod day05;
 pub mod day06;
 pub mod day07;
+pub mod day10;
 
 use crate::template::Solution;
 
@@ -17,6 +18,7 @@ pub fn fetch(day: u32) -> Box<dyn Solution + 'static> {
         5 => Box::new(day05::Day05),
         6 => Box::new(day06::Day06),
         7 => Box::new(day07::Day07),
+        10 => Box::new(day10::Day10),
         _ => panic!("Day {} not implemented", day),
     }
 }

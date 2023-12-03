@@ -1,13 +1,8 @@
-#![allow(unused)]
-
 use crate::template::Solution;
-use anyhow::Error as ParseError;
 use anyhow::Result;
-use itertools::Itertools;
-use tap::prelude::*;
 
 const DATA: &str = include_str!("../../data/day02.txt");
-const EXAMPLE: &str = include_str!("../../data/day02_example.txt");
+// const EXAMPLE: &str = include_str!("../../data/day02_example.txt");
 
 pub struct Day02;
 
@@ -75,13 +70,12 @@ mod parser {
         branch::alt,
         bytes::complete::tag,
         character::complete::{digit1, line_ending, space1},
-        combinator::{eof, map_res, opt},
+        combinator::{eof, map_res},
         multi::{many1, separated_list1},
         sequence::{terminated, tuple},
         Err as NomErr, IResult,
     };
     pub struct Parser;
-    use anyhow::Result;
 
     impl Parser {
         pub fn games(input: &str) -> IResult<&str, Vec<Game>> {

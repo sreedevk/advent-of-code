@@ -1,13 +1,15 @@
-[workspace]
-members = [
-  "runner",
-  "common",
-  "solutions-2021",
-  "solutions-2022",
-  "solutions-2018",
-  "solutions-2015",
-  "aoc-utils",
-]
+[package]
+name = "aoc"
+version = "0.1.0"
+edition = "2021"
 
-exclude = ["data", "challenges", "templates"]
-default-members = ["runner"]
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.75"
+itertools = "0.10.5"
+nom = "7.1.1"
+petgraph = "0.6.2"
+rayon = "1.6.0"
+tap = "1.0.1"
+uint = "0.9.3"

@@ -1,7 +1,0 @@
-source 'https://rubygems.org'
-
-gem 'faraday'
-gem 'nokogiri'
-gem 'parallel'
-gem 'pry'
-gem 'rubocop'

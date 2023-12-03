@@ -1,15 +1,12 @@
-#![allow(unused, unused_imports)]
-
 use crate::template::Solution;
 use anyhow::Result;
 use itertools::Itertools;
-use regex::{Regex, RegexSet};
-use tap::prelude::*;
+use regex::Regex;
 
 pub struct Day01;
 
 const DATA: &str = include_str!("../../data/day01.txt");
-const EXAMPLE: &str = include_str!("../../data/day01_example.txt");
+// const EXAMPLE: &str = include_str!("../../data/day01_example.txt");
 
 impl Solution for Day01 {
     fn solve_part1(&self) -> Result<String> {

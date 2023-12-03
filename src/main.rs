@@ -3,7 +3,6 @@ mod template;
 
 use std::env::args;
 use anyhow::Result;
-use template::Solution;
 
 fn main() -> Result<()> {
     let day = args().nth(1).expect("[ERR] Solution Day Not Specified!").parse::<u32>()?;

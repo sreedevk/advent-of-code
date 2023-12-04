@@ -7,6 +7,8 @@ pub struct Day03;
 const DATA: &str = include_str!("../../data/day03.txt");
 const EXAMPLE: &str = include_str!("../../data/day03_example.txt");
 
+// NOTE : THIS SOLUTION IS INCOMPLETE
+
 #[derive(Debug)]
 struct Cell<'a> {
     inner: CellInner<'a>,

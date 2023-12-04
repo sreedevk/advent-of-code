@@ -44,7 +44,7 @@ impl Solution for Day01 {
                 "eight" => 8,
                 "nine" => 9,
                 "zero" => 0,
-                x => u32::from_str_radix(x, 10).unwrap(),
+                x => x.parse::<u32>().unwrap(),
             }
         };
 

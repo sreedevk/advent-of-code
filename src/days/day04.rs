@@ -1,6 +1,7 @@
 #![allow(unused)]
 use crate::template::Solution;
 use anyhow::Result;
+use tap::Tap;
 
 pub struct Day04;
 
@@ -12,7 +13,22 @@ struct Card {
     id: u32,
     winning_numbers: Vec<u32>,
     own_numbers: Vec<u32>,
-    points: u32,
+}
+
+impl Card {
+    fn points(&self) -> Result<u32> {
+        let win_count = self
+            .winning_numbers
+            .iter()
+            .filter(|winnum| self.own_numbers.iter().any(|ownnum| ownnum.eq(winnum)))
+            .count();
+
+        if win_count == 0 {
+            return Ok(0);
+        } else {
+            Ok(u32::pow(2, (win_count as u32) - 1))
+        }
+    }
 }
 
 mod parser {
@@ -21,7 +37,7 @@ mod parser {
     use nom::{
         branch::alt,
         bytes::complete::{is_not, tag, take_while1},
-        character::complete::{anychar, digit1, newline, one_of, space0},
+        character::complete::{anychar, digit1, newline, one_of, space0, space1},
         combinator::{eof, map_res},
         multi::{many1, many_till},
         sequence::{terminated, tuple},
@@ -35,30 +51,33 @@ mod parser {
             let card_number_parser = |inp: &'a str| -> IResult<&'a str, u32> {
                 map_res(
                     tuple((
-                        tag("Card "),
+                        tag("Card"),
+                        space1,
                         map_res(digit1, |s: &'a str| -> Result<u32, Err<&'a str>> {
                             Ok(s.parse::<u32>().unwrap())
                         }),
                         tag(": "),
                     )),
-                    |(_, card_id, _)| Ok::<u32, Err<&'a str>>(card_id),
+                    |(_, _, card_id, _)| Ok::<u32, Err<&'a str>>(card_id),
                 )(inp)
             };
 
             let winning_numbers_parser = |inp: &'a str| -> IResult<&str, Vec<u32>> {
                 terminated(
-                    many1(map_res(terminated(digit1, space0), |n: &str| {
-                        Ok::<u32, Err<&str>>(n.parse::<u32>().unwrap())
-                    })),
+                    many1(map_res(
+                        tuple((space0, terminated(digit1, space0))),
+                        |(_, n): (&str, &str)| Ok::<u32, Err<&str>>(n.parse::<u32>().unwrap()),
+                    )),
                     tag("| "),
                 )(inp)
             };
 
             let own_numbers_parser = |inp: &'a str| -> IResult<&str, Vec<u32>> {
                 terminated(
-                    many1(map_res(terminated(digit1, space0), |n: &str| {
-                        Ok::<u32, Err<&str>>(n.parse::<u32>().unwrap())
-                    })),
+                    many1(map_res(
+                        tuple((space0, terminated(digit1, space0))),
+                        |(_, n): (&str, &str)| Ok::<u32, Err<&str>>(n.parse::<u32>().unwrap()),
+                    )),
                     alt((tag("\n"), eof)),
                 )(inp)
             };
@@ -75,7 +94,6 @@ mod parser {
                             id: card_id,
                             winning_numbers: winning,
                             own_numbers: own,
-                            points: 0,
                         })
                     },
                 )(inp)
@@ -91,8 +109,12 @@ use parser::Parser;
 
 impl Solution for Day04 {
     fn solve_part1(&self) -> Result<String> {
-        dbg!(Parser::parse(EXAMPLE));
-        Ok("".to_string())
+        Ok(Parser::parse(DATA)
+            .map(|(_, res)| res)?
+            .iter()
+            .map(|card| Card::points(card).unwrap_or_default())
+            .sum::<u32>()
+            .to_string())
     }
 
     fn solve_part2(&self) -> Result<String> {

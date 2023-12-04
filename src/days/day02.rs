@@ -33,7 +33,7 @@ impl Game {
             .clone()
             .into_iter()
             .filter(|cubes| {
-                cubes.into_iter().any(|cube| match cube {
+                cubes.iter().any(|cube| match cube {
                     Cube::Green(count) => count.gt(&config.green),
                     Cube::Red(count) => count.gt(&config.red),
                     Cube::Blue(count) => count.gt(&config.blue),

@@ -60,7 +60,6 @@ impl Solution for Day01 {
                             .map(move |m| (m.start(), m.as_str()))
                             .collect::<Vec<_>>()
                     })
-                    .into_iter()
                     .sorted_by(|(i1, _), (i2, _)| i1.cmp(i2))
                     .map(|(_, s)| parse_int(s))
                     .collect::<Vec<u32>>()

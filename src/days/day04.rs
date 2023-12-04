@@ -97,7 +97,7 @@ mod parser {
             many1(Self::card_parser)(inp)
         }
 
-        pub fn parse<'a>(input: &'a str) -> IResult<&'a str, Vec<Card>> {
+        pub fn parse(input: &str) -> IResult<&str, Vec<Card>> {
             Self::card_list_parser(input)
         }
     }

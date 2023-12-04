@@ -17,17 +17,12 @@ struct Card {
 
 impl Card {
     fn points(&self) -> Result<u32> {
-        let win_count = self
+        Ok(self
             .winning_numbers
             .iter()
             .filter(|winnum| self.own_numbers.iter().any(|ownnum| ownnum.eq(winnum)))
-            .count();
-
-        if win_count == 0 {
-            return Ok(0);
-        } else {
-            Ok(u32::pow(2, (win_count as u32) - 1))
-        }
+            .count())
+        .map(|cnt| { if cnt.eq(&0) { 0 } else { u32::pow(2, (cnt as u32) - 1) } })
     }
 }
 
@@ -47,60 +42,63 @@ mod parser {
     pub struct Parser;
 
     impl Parser {
+        fn card_number_parser(inp: &str) -> IResult<&str, u32> {
+            map_res(
+                tuple((
+                    tag("Card"),
+                    space1,
+                    map_res(digit1, |s: &str| -> Result<u32, Err<&str>> {
+                        Ok(s.parse::<u32>().unwrap())
+                    }),
+                    tag(": "),
+                )),
+                |(_, _, card_id, _)| Ok::<u32, Err<&str>>(card_id),
+            )(inp)
+        }
+
+        fn own_numbers_parser(inp: &str) -> IResult<&str, Vec<u32>> {
+            terminated(
+                many1(map_res(
+                    tuple((space0, terminated(digit1, space0))),
+                    |(_, n): (&str, &str)| Ok::<u32, Err<&str>>(n.parse::<u32>().unwrap()),
+                )),
+                alt((tag("\n"), eof)),
+            )(inp)
+        }
+
+        fn winning_numbers_parser(inp: &str) -> IResult<&str, Vec<u32>> {
+            terminated(
+                many1(map_res(
+                    tuple((space0, terminated(digit1, space0))),
+                    |(_, n): (&str, &str)| Ok::<u32, Err<&str>>(n.parse::<u32>().unwrap()),
+                )),
+                tag("| "),
+            )(inp)
+        }
+
+        fn card_parser(inp: &str) -> IResult<&str, Card> {
+            map_res(
+                tuple((
+                    Self::card_number_parser,
+                    Self::winning_numbers_parser,
+                    Self::own_numbers_parser,
+                )),
+                |(card_id, winning, own)| {
+                    Ok::<Card, Err<&str>>(Card {
+                        id: card_id,
+                        winning_numbers: winning,
+                        own_numbers: own,
+                    })
+                },
+            )(inp)
+        }
+
+        fn card_list_parser(inp: &str) -> IResult<&str, Vec<Card>> {
+            many1(Self::card_parser)(inp)
+        }
+
         pub fn parse<'a>(input: &'a str) -> IResult<&'a str, Vec<Card>> {
-            let card_number_parser = |inp: &'a str| -> IResult<&'a str, u32> {
-                map_res(
-                    tuple((
-                        tag("Card"),
-                        space1,
-                        map_res(digit1, |s: &'a str| -> Result<u32, Err<&'a str>> {
-                            Ok(s.parse::<u32>().unwrap())
-                        }),
-                        tag(": "),
-                    )),
-                    |(_, _, card_id, _)| Ok::<u32, Err<&'a str>>(card_id),
-                )(inp)
-            };
-
-            let winning_numbers_parser = |inp: &'a str| -> IResult<&str, Vec<u32>> {
-                terminated(
-                    many1(map_res(
-                        tuple((space0, terminated(digit1, space0))),
-                        |(_, n): (&str, &str)| Ok::<u32, Err<&str>>(n.parse::<u32>().unwrap()),
-                    )),
-                    tag("| "),
-                )(inp)
-            };
-
-            let own_numbers_parser = |inp: &'a str| -> IResult<&str, Vec<u32>> {
-                terminated(
-                    many1(map_res(
-                        tuple((space0, terminated(digit1, space0))),
-                        |(_, n): (&str, &str)| Ok::<u32, Err<&str>>(n.parse::<u32>().unwrap()),
-                    )),
-                    alt((tag("\n"), eof)),
-                )(inp)
-            };
-
-            let card_parser = |inp: &'a str| -> IResult<&'a str, Card> {
-                map_res(
-                    tuple((
-                        card_number_parser,
-                        winning_numbers_parser,
-                        own_numbers_parser,
-                    )),
-                    |(card_id, winning, own)| {
-                        Ok::<Card, Err<&'a str>>(Card {
-                            id: card_id,
-                            winning_numbers: winning,
-                            own_numbers: own,
-                        })
-                    },
-                )(inp)
-            };
-
-            let mut card_list_parser = many1(card_parser);
-            card_list_parser(input)
+            Self::card_list_parser(input)
         }
     }
 }

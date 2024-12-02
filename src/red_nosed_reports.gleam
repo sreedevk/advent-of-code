@@ -1,5 +1,4 @@
 import gleam/int
-import gleam/io
 import gleam/list
 import gleam/pair
 import gleam/result
@@ -26,25 +25,16 @@ fn all_decr(report: List(Int)) -> Bool {
   }
 }
 
-fn valid(report: List(Int)) -> Bool {
-  all_incr(report) || all_decr(report)
-}
-
-fn valid_after_dampener(report) -> Bool {
-  case valid(report) {
-    True -> True
-    False -> {
-      let indexed_list = list.index_map(report, fn(x, i) { #(i, x) })
-      let range = list.range(0, list.length(indexed_list) - 1)
-      let final_list =
-        list.map(range, fn(rmi) {
-          use #(_, flist) <- result.map(list.key_pop(indexed_list, rmi))
-          list.map(flist, pair.second)
-        })
-
-      let ys = list.map(final_list, fn(y) { result.unwrap(y, []) })
-      list.any(ys, fn(y) { valid(y) })
-    }
+fn valid(report: List(Int), d: Bool) -> Bool {
+  case d {
+    False -> all_incr(report) || all_decr(report)
+    True ->
+      valid(report, False)
+      || {
+        report
+        |> list.combinations(list.length(report) - 1)
+        |> list.any(valid(_, False))
+      }
   }
 }
 
@@ -53,7 +43,7 @@ pub fn solve_a(input: String) -> Int {
   |> string.trim()
   |> string.split("\n")
   |> list.map(parse_line)
-  |> list.count(valid(_))
+  |> list.count(valid(_, False))
 }
 
 pub fn solve_b(input: String) -> Int {
@@ -61,6 +51,6 @@ pub fn solve_b(input: String) -> Int {
   |> string.trim()
   |> string.split("\n")
   |> list.map(parse_line)
-  |> list.filter(valid_after_dampener(_))
+  |> list.filter(valid(_, True))
   |> list.length()
 }

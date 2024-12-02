@@ -1,8 +1,8 @@
+import gleam/int
+import gleam/list
+import gleam/pair
 import gleam/result
 import gleam/string
-import gleam/list
-import gleam/int
-import gleam/pair
 
 fn parse_line(line: String) -> List(Int) {
   use line <- list.map(string.split(line, "   "))
@@ -16,7 +16,7 @@ fn dist(scans: #(Int, Int)) {
 pub fn solve_a(input) -> Int {
   input
   |> string.trim()
-  |> string.split("\n") 
+  |> string.split("\n")
   |> list.map(parse_line)
   |> list.transpose()
   |> list.map(fn(x) { list.reverse(x) })
@@ -34,7 +34,7 @@ fn similarity(x: Int, y: List(Int)) {
 pub fn solve_b(input) -> Int {
   input
   |> string.trim()
-  |> string.split("\n") 
+  |> string.split("\n")
   |> list.map(parse_line)
   |> list.transpose()
   |> list.map(fn(x) { list.reverse(x) })

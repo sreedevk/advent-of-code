@@ -2,6 +2,7 @@ import gleam/int
 import gleam/io
 import gleam/result
 import historian_hysteria as day01
+import mull_it_over as day03
 import red_nosed_reports as day02
 import simplifile.{read}
 
@@ -29,6 +30,19 @@ pub fn main() {
       )
       io.println(
         "[2] Red Nosed Reports (Part 2): " <> int.to_string(day02.solve_b(data)),
+      )
+    }),
+    Nil,
+  )
+
+  //  Day 03
+  result.unwrap(
+    result.map(read("data/day3.txt"), fn(data) {
+      io.println(
+        "[3] Mull It Over (Part 1): " <> int.to_string(day03.solve_a(data)),
+      )
+      io.println(
+        "[3] Mull It Over (Part 2): " <> int.to_string(day03.solve_b(data)),
       )
     }),
     Nil,

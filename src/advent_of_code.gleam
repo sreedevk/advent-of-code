@@ -1,3 +1,4 @@
+import ceres_search as day04
 import gleam/int
 import gleam/io
 import gleam/result
@@ -43,6 +44,19 @@ pub fn main() {
       )
       io.println(
         "[3] Mull It Over (Part 2): " <> int.to_string(day03.solve_b(data)),
+      )
+    }),
+    Nil,
+  )
+
+  //  Day 04
+  result.unwrap(
+    result.map(read("data/day4.txt"), fn(data) {
+      io.println(
+        "[4] Ceres Search (Part 1): " <> int.to_string(day04.solve_a(data)),
+      )
+      io.println(
+        "[4] Ceres Search (Part 2): " <> int.to_string(day04.solve_b(data)),
       )
     }),
     Nil,

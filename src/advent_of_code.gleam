@@ -4,6 +4,7 @@ import gleam/io
 import gleam/result
 import historian_hysteria as day01
 import mull_it_over as day03
+import print_queue as day05
 import red_nosed_reports as day02
 import simplifile.{read}
 
@@ -57,6 +58,19 @@ pub fn main() {
       )
       io.println(
         "[4] Ceres Search (Part 2): " <> int.to_string(day04.solve_b(data)),
+      )
+    }),
+    Nil,
+  )
+
+  //  Day 05
+  result.unwrap(
+    result.map(read("data/day5.txt"), fn(data) {
+      io.println(
+        "[5] Print Queue (Part 1): " <> int.to_string(day05.solve_a(data)),
+      )
+      io.println(
+        "[5] Print Queue (Part 2): " <> int.to_string(day05.solve_b(data)),
       )
     }),
     Nil,

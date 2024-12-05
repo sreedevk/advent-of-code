@@ -1,4 +1,3 @@
-import gleam/io
 import gleam/string
 import gleeunit/should
 import print_queue as day05

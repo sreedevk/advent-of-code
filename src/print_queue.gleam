@@ -1,9 +1,11 @@
+import gleam/bool
 import gleam/int
-import gleam/io
 import gleam/list
-import gleam/pair
+import gleam/pair.{first as pf, second as ps}
 import gleam/result
 import gleam/string
+import gleam/yielder
+import utils/list as li
 
 type Rule =
   #(Int, Int)
@@ -34,31 +36,8 @@ fn parse_file(input: String) -> #(List(Rule), List(Order)) {
   #(parsed_rules, parsed_orders)
 }
 
-fn contains(ls: List(a), item: a) -> Bool {
-  result.is_ok(list.find(ls, fn(x) { x == item }))
-}
-
-fn filter_with_index(ls: List(a), f: fn(Int, a) -> Bool) -> List(a) {
-  list.index_map(ls, fn(item, index) { #(index, item) })
-  |> list.filter(fn(x) { f(pair.first(x), pair.second(x)) })
-  |> list.map(fn(y) { pair.second(y) })
-}
-
-fn at(ls: List(a), idx: Int) -> Result(a, Nil) {
-  list.index_map(ls, fn(item, index) { #(index, item) })
-  |> list.find(fn(x) { pair.first(x) == idx })
-  |> result.map(fn(res) { pair.second(res) })
-}
-
 fn rule_applicable(order: Order, rule: Rule) -> Bool {
-  let #(x, y) = rule
-  contains(order, x) && contains(order, y)
-}
-
-fn index(ls: List(a), item: a) -> Result(Int, Nil) {
-  list.index_map(ls, fn(x, index) { #(index, x) })
-  |> list.find(fn(x) { pair.second(x) == item })
-  |> result.map(fn(x) { pair.first(x) })
+  list.all(li.from_pair(rule), li.contains(order, _))
 }
 
 fn rule_satisfied(order: Order, rule: Rule) -> Bool {
@@ -71,47 +50,39 @@ fn rule_satisfied(order: Order, rule: Rule) -> Bool {
 fn order_follows_rules(order: Order, rules: List(Rule)) -> Bool {
   rules
   |> list.filter(rule_applicable(order, _))
-  |> list.all(fn(rule) { rule_satisfied(order, rule) })
+  |> list.all(rule_satisfied(order, _))
+}
+
+fn rule_satisfied_or_swap(order: Order, rule: Rule) -> Order {
+  case rule_satisfied(order, rule) {
+    True -> order
+    False -> li.swap(order, pf(rule), ps(rule))
+  }
 }
 
 fn make_order_follow_rules(order: Order, rules: List(Rule)) -> Order {
-  rules
-  |> list.filter(rule_applicable(order, _))
-  |> list.fold(order, fn(oc, rule) {
-    case rule_satisfied(oc, rule) {
-      True -> oc
-      False -> swap(oc, pair.first(rule), pair.second(rule))
-    }
-  })
-  |> fn(oc) {
-    case order_follows_rules(oc, rules) {
-      True -> oc
-      False -> make_order_follow_rules(oc, rules)
+  case order_follows_rules(order, rules) {
+    True -> order
+    False -> {
+      list.filter(rules, rule_applicable(order, _))
+      |> list.fold(order, rule_satisfied_or_swap)
+      |> make_order_follow_rules(rules)
     }
   }
 }
 
 fn middle(order: Order) -> Int {
   order
-  |> at(list.length(order) / 2)
+  |> yielder.from_list
+  |> yielder.at(list.length(order) / 2)
   |> result.unwrap(0)
-}
-
-fn swap(ls: List(a), ea: a, eb: a) -> List(a) {
-  list.map(ls, fn(x) {
-    case x {
-      val if val == ea -> eb
-      val if val == eb -> ea
-      val -> val
-    }
-  })
 }
 
 pub fn solve_a(input: String) -> Int {
   let #(rules, orders) = parse_file(input)
 
   orders
-  |> list.filter(fn(order) { order_follows_rules(order, rules) })
+  |> list.filter(order_follows_rules(_, rules))
   |> list.map(middle)
   |> list.fold(0, int.add)
 }
@@ -120,8 +91,8 @@ pub fn solve_b(input: String) -> Int {
   let #(rules, orders) = parse_file(input)
 
   orders
-  |> list.filter(fn(order) { !order_follows_rules(order, rules) })
-  |> list.map(fn(order) { make_order_follow_rules(order, rules) })
+  |> list.filter(fn(order) { bool.negate(order_follows_rules(order, rules)) })
+  |> list.map(make_order_follow_rules(_, rules))
   |> list.map(middle)
   |> list.fold(0, int.add)
 }

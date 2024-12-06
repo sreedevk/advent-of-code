@@ -84,8 +84,7 @@ pub fn main() {
         "[6] Guard Gallivant (Part 1): " <> int.to_string(day06.solve_a(data)),
       )
       io.println(
-        "[6] Guard Gallivant (Part 2): skipped execution (runtime 9m30s)",
-        // <> int.to_string(day06.solve_b(data)),
+        "[6] Guard Gallivant (Part 2): " <> int.to_string(day06.solve_b(data)),
       )
     }),
     Nil,

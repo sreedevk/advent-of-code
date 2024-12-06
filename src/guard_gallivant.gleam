@@ -2,7 +2,7 @@ import gleam/dict.{type Dict}
 import gleam/list
 import gleam/option.{type Option, Some}
 import gleam/otp/task
-import gleam/pair
+import gleam/pair.{first as pf, second as ps}
 import gleam/result
 import gleam/string
 import utils/list as li
@@ -10,7 +10,6 @@ import utils/list as li
 type Entity {
   Guard
   Obstacle
-  UserObst
   Path
   Unknown(String)
 }
@@ -35,10 +34,7 @@ type Boundaries =
   #(Int, Int)
 
 type State =
-  #(Point, Direction, Grid, List(History), Boundaries)
-
-type AdvState =
-  #(State, Bool)
+  #(Point, Direction, Grid, List(History), Boundaries, Bool)
 
 fn parse_column(line, y) {
   use grid, char, x <- list.index_fold(line, dict.new())
@@ -60,48 +56,33 @@ fn parse_grid(input: String) -> Grid {
   |> result.unwrap(dict.new())
 }
 
-fn is_guard_position(position) -> Bool {
-  case position {
-    #(_, entity) if entity == Guard -> True
+fn is_guard_position(pos: Point, g: Grid) -> Bool {
+  case dict.get(g, pos) {
+    Ok(Guard) -> True
     _ -> False
   }
 }
 
-fn guard_position(grid: Grid) -> Result(Point, Nil) {
-  dict.to_list(grid)
-  |> list.find(is_guard_position)
-  |> result.map(fn(set) { pair.first(set) })
-}
-
 fn init_state(g: Grid) -> State {
-  let assert Ok(gp) = guard_position(g)
-  #(gp, Up, g, [#(gp, Up)], #(max_x(g), max_y(g)))
+  let assert Ok(gp) = list.find(dict.keys(g), is_guard_position(_, g))
+  let max_x = li.max(list.map(dict.keys(g), pf))
+  let max_y = li.max(list.map(dict.keys(g), ps))
+
+  #(gp, Up, g, [#(gp, Up)], #(max_x, max_y), False)
 }
 
-fn init_adv_state(grid: Grid) -> AdvState {
-  #(init_state(grid), False)
-}
-
-fn max_x(grid: Grid) -> Int {
-  li.max(list.map(dict.keys(grid), pair.first))
-}
-
-fn max_y(grid: Grid) -> Int {
-  li.max(list.map(dict.keys(grid), pair.second))
-}
-
-fn update_coordinates(position: Point, direction: Direction) -> Point {
-  case direction {
-    Up -> #(pair.first(position), pair.second(position) - 1)
-    Down -> #(pair.first(position), pair.second(position) + 1)
-    Left -> #(pair.first(position) - 1, pair.second(position))
-    Right -> #(pair.first(position) + 1, pair.second(position))
+fn incr_pos(pos: Point, dir: Direction) -> Point {
+  case dir {
+    Up -> #(pf(pos), ps(pos) - 1)
+    Down -> #(pf(pos), ps(pos) + 1)
+    Left -> #(pf(pos) - 1, ps(pos))
+    Right -> #(pf(pos) + 1, ps(pos))
   }
 }
 
 fn is_obstacle(position: Point, grid: Grid) -> Bool {
   case dict.get(grid, position) {
-    Ok(Obstacle) | Ok(UserObst) -> True
+    Ok(Obstacle) -> True
     _ -> False
   }
 }
@@ -116,7 +97,7 @@ fn rotate_cw(d: Direction) -> Direction {
 }
 
 fn next_coordinates(pos: Point, dir: Direction, g: Grid) -> #(Point, Direction) {
-  let np = update_coordinates(pos, dir)
+  let np = incr_pos(pos, dir)
   case is_obstacle(np, g) {
     True -> next_coordinates(pos, rotate_cw(dir), g)
     False -> #(np, dir)
@@ -130,34 +111,40 @@ fn guard_exited(pos: Point, bounds: #(Int, Int)) -> Bool {
 }
 
 fn emulate(state: State) -> State {
-  let #(gp, gd, g, vs, bounds) = state
+  let #(gp, gd, g, vs, bounds, _) = state
   let #(ngp, ngd) = next_coordinates(gp, gd, g)
   case guard_exited(ngp, bounds) {
     True -> state
-    False -> emulate(#(ngp, ngd, g, list.append(vs, [#(ngp, ngd)]), bounds))
+    False ->
+      emulate(#(ngp, ngd, g, list.append(vs, [#(ngp, ngd)]), bounds, False))
   }
 }
 
 fn visited_count(st: State) -> Int {
-  let #(_, _, _, hist, _) = st
+  let #(_, _, _, hist, _, _) = st
   hist
-  |> list.map(fn(x) { pair.first(x) })
+  |> list.map(pf)
   |> list.unique()
   |> list.length()
 }
 
-fn iterate(astate: AdvState) -> AdvState {
-  let #(state, _) = astate
-  let #(gp, gd, g, vs, bounds) = state
+fn visited_paths(st: State) -> #(Grid, List(Point)) {
+  let #(_, _, g, hist, _, _) = st
+
+  #(g, list.unique(list.map(hist, pf)))
+}
+
+fn iterate(state: State) -> State {
+  let #(gp, gd, g, vs, bounds, _) = state
   let #(ngp, ngd) = next_coordinates(gp, gd, g)
   let ngh = list.append(vs, [#(ngp, ngd)])
 
   case guard_exited(ngp, bounds) {
-    True -> #(state, False)
+    True -> state
     False ->
       case li.contains(vs, #(ngp, ngd)) {
-        True -> #(#(ngp, ngd, g, ngh, bounds), True)
-        False -> iterate(#(#(ngp, ngd, g, ngh, bounds), False))
+        True -> #(ngp, ngd, g, ngh, bounds, True)
+        False -> iterate(#(ngp, ngd, g, ngh, bounds, False))
       }
   }
 }
@@ -166,28 +153,25 @@ fn add_obst(g: Grid, pt: Point) -> Grid {
   dict.upsert(g, pt, fn(ent: Option(Entity)) {
     case ent {
       Some(Guard) -> Guard
-      _ -> UserObst
+      _ -> Obstacle
     }
   })
 }
 
-fn computer_obst_chunk_var(g: Grid, points: List(Point)) -> List(Bool) {
-  use obs_pos <- list.map(points)
-  add_obst(g, obs_pos)
-  |> init_adv_state
-  |> iterate
-  |> pair.second
+fn computer_obst(g: Grid, point: Point) {
+  task.async(fn() {
+    case iterate(init_state(add_obst(g, point))) {
+      #(_, _, _, _, _, r) -> r
+    }
+  })
 }
 
-fn computer_obst_all_var(g: Grid) -> Int {
-  dict.keys(g)
-  |> list.sized_chunk(5000)
-  |> list.map(fn(pos_chunk) {
-    task.async(fn() { computer_obst_chunk_var(g, pos_chunk) })
-  })
-  |> list.map(task.await_forever)
-  |> list.flatten
-  |> list.count(fn(x) { x })
+fn computer_obst_all_var(info) -> Int {
+  let #(g, original_path) = info
+
+  original_path
+  |> list.map(computer_obst(g, _))
+  |> list.count(task.await_forever)
 }
 
 pub fn solve_a(input: String) -> Int {
@@ -199,5 +183,8 @@ pub fn solve_a(input: String) -> Int {
 
 pub fn solve_b(input: String) -> Int {
   parse_grid(input)
+  |> init_state
+  |> emulate
+  |> visited_paths
   |> computer_obst_all_var
 }

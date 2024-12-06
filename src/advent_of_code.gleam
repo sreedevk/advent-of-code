@@ -2,6 +2,7 @@ import ceres_search as day04
 import gleam/int
 import gleam/io
 import gleam/result
+import guard_gallivant as day06
 import historian_hysteria as day01
 import mull_it_over as day03
 import print_queue as day05
@@ -71,6 +72,19 @@ pub fn main() {
       )
       io.println(
         "[5] Print Queue (Part 2): " <> int.to_string(day05.solve_b(data)),
+      )
+    }),
+    Nil,
+  )
+
+  //  Day 06
+  result.unwrap(
+    result.map(read("data/day6.txt"), fn(data) {
+      io.println(
+        "[6] Guard Gallivant (Part 1): " <> int.to_string(day06.solve_a(data)),
+      )
+      io.println(
+        "[6] Guard Gallivant (Part 2): " <> int.to_string(day06.solve_b(data)),
       )
     }),
     Nil,

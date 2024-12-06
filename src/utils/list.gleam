@@ -30,3 +30,12 @@ pub fn swap(ls: List(a), ea: a, eb: a) -> List(a) {
     val -> val
   }
 }
+
+pub fn max(ls: List(Int)) -> Int {
+  li.fold(ls, 0, fn(cmx, cx) {
+    case cx {
+      cxx if cxx > cmx -> cxx
+      _ -> cmx
+    }
+  })
+}

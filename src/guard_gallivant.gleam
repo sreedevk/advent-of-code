@@ -30,11 +30,16 @@ type Direction {
 type History =
   #(Point, Direction)
 
-type Boundaries =
-  #(Int, Int)
-
-type State =
-  #(Point, Direction, Grid, List(History), Boundaries, Bool)
+type IterState {
+  IterState(
+    point: Point,
+    direction: Direction,
+    grid: Grid,
+    histories: List(History),
+    max_bound: Int,
+    looping: Bool,
+  )
+}
 
 fn parse_column(line, y) {
   use grid, char, x <- list.index_fold(line, dict.new())
@@ -63,12 +68,16 @@ fn is_guard_position(pos: Point, g: Grid) -> Bool {
   }
 }
 
-fn init_state(g: Grid) -> State {
+fn init_state(g: Grid) -> IterState {
   let assert Ok(gp) = list.find(dict.keys(g), is_guard_position(_, g))
-  let max_x = li.max(list.map(dict.keys(g), pf))
-  let max_y = li.max(list.map(dict.keys(g), ps))
-
-  #(gp, Up, g, [#(gp, Up)], #(max_x, max_y), False)
+  IterState(
+    point: gp,
+    direction: Up,
+    grid: g,
+    histories: [#(gp, Up)],
+    max_bound: li.max(list.map(dict.keys(g), pf)),
+    looping: False,
+  )
 }
 
 fn incr_pos(pos: Point, dir: Direction) -> Point {
@@ -104,47 +113,64 @@ fn next_coordinates(pos: Point, dir: Direction, g: Grid) -> #(Point, Direction) 
   }
 }
 
-fn guard_exited(pos: Point, bounds: #(Int, Int)) -> Bool {
+fn guard_exited(pos: Point, b: Int) -> Bool {
   let #(x, y) = pos
-  let #(mx, my) = bounds
-  x > mx || x < 0 || y < 0 || y > my
+  x > b || x < 0 || y < 0 || y > b
 }
 
-fn emulate(state: State) -> State {
-  let #(gp, gd, g, vs, bounds, _) = state
-  let #(ngp, ngd) = next_coordinates(gp, gd, g)
-  case guard_exited(ngp, bounds) {
-    True -> state
+fn emulate(is: IterState) -> IterState {
+  let #(ngp, ngd) = next_coordinates(is.point, is.direction, is.grid)
+  case guard_exited(ngp, is.max_bound) {
+    True -> is
     False ->
-      emulate(#(ngp, ngd, g, list.append(vs, [#(ngp, ngd)]), bounds, False))
+      emulate(IterState(
+        point: ngp,
+        direction: ngd,
+        grid: is.grid,
+        histories: list.append(is.histories, [#(ngp, ngd)]),
+        max_bound: is.max_bound,
+        looping: False,
+      ))
   }
 }
 
-fn visited_count(st: State) -> Int {
-  let #(_, _, _, hist, _, _) = st
-  hist
+fn visited_count(is: IterState) -> Int {
+  is.histories
   |> list.map(pf)
-  |> list.unique()
-  |> list.length()
+  |> list.unique
+  |> list.length
 }
 
-fn visited_paths(st: State) -> #(Grid, List(Point)) {
-  let #(_, _, g, hist, _, _) = st
-
-  #(g, list.unique(list.map(hist, pf)))
+fn visited_paths(is: IterState) -> #(Grid, List(Point)) {
+  #(is.grid, list.unique(list.map(is.histories, pf)))
 }
 
-fn iterate(state: State) -> State {
-  let #(gp, gd, g, vs, bounds, _) = state
-  let #(ngp, ngd) = next_coordinates(gp, gd, g)
-  let ngh = list.append(vs, [#(ngp, ngd)])
+fn iterate(is: IterState) -> IterState {
+  let #(ngp, ngd) = next_coordinates(is.point, is.direction, is.grid)
+  let ngh = list.append(is.histories, [#(ngp, ngd)])
 
-  case guard_exited(ngp, bounds) {
-    True -> state
+  case guard_exited(ngp, is.max_bound) {
+    True -> is
     False ->
-      case li.contains(vs, #(ngp, ngd)) {
-        True -> #(ngp, ngd, g, ngh, bounds, True)
-        False -> iterate(#(ngp, ngd, g, ngh, bounds, False))
+      case li.contains(is.histories, #(ngp, ngd)) {
+        True ->
+          IterState(
+            point: ngp,
+            direction: ngd,
+            grid: is.grid,
+            histories: ngh,
+            max_bound: is.max_bound,
+            looping: True,
+          )
+        False ->
+          iterate(IterState(
+            point: ngp,
+            direction: ngd,
+            grid: is.grid,
+            histories: ngh,
+            max_bound: is.max_bound,
+            looping: False,
+          ))
       }
   }
 }
@@ -158,19 +184,20 @@ fn add_obst(g: Grid, pt: Point) -> Grid {
   })
 }
 
-fn computer_obst(g: Grid, point: Point) {
+fn is_infinite_loop_obstacle(g: Grid, point: Point) {
   task.async(fn() {
-    case iterate(init_state(add_obst(g, point))) {
-      #(_, _, _, _, _, r) -> r
-    }
+    add_obst(g, point)
+    |> init_state
+    |> iterate
+    |> fn(x) { x.looping }
   })
 }
 
-fn computer_obst_all_var(info) -> Int {
+fn count_infinite_loop_obstacles(info) -> Int {
   let #(g, original_path) = info
 
   original_path
-  |> list.map(computer_obst(g, _))
+  |> list.map(is_infinite_loop_obstacle(g, _))
   |> list.count(task.await_forever)
 }
 
@@ -186,5 +213,5 @@ pub fn solve_b(input: String) -> Int {
   |> init_state
   |> emulate
   |> visited_paths
-  |> computer_obst_all_var
+  |> count_infinite_loop_obstacles
 }

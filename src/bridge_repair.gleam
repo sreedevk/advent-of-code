@@ -1,8 +1,6 @@
 import gleam/int
-import gleam/io
 import gleam/list
 import gleam/otp/task
-import gleam/pair.{second as ps}
 import gleam/result
 import gleam/string
 import utils/list as li
@@ -30,22 +28,34 @@ fn parse_num(x: String) -> Int {
   result.unwrap(int.parse(x), 0)
 }
 
+fn mult(lhs: String, rhs: String) -> String {
+  int.to_string(int.multiply(parse_num(lhs), parse_num(rhs)))
+}
+
+fn add(lhs: String, rhs: String) -> String {
+  int.to_string(int.add(parse_num(lhs), parse_num(rhs)))
+}
+
+fn solve_part(eq: List(String)) -> List(String) {
+  case eq {
+    [lhs, opr, rhs] ->
+      case opr {
+        "*" -> list.wrap(mult(lhs, rhs))
+        "+" -> list.wrap(add(lhs, rhs))
+        "|" -> list.wrap(lhs <> rhs)
+        _ -> []
+      }
+    _ -> []
+  }
+}
+
 fn solve_eq_lr(eq: List(String)) -> List(String) {
   case list.length(eq) {
-    1 -> eq
+    1 | 0 -> eq
     _ -> {
-      let #(head, tail) = list.split(eq, 3)
-      let reduced = case head {
-        [lhs, opr, rhs] ->
-          case opr {
-            "*" -> [int.to_string(int.multiply(parse_num(lhs), parse_num(rhs)))]
-            "+" -> [int.to_string(int.add(parse_num(lhs), parse_num(rhs)))]
-            "||" -> [string.join([lhs, rhs], "")]
-            _ -> ["0"]
-          }
-        _ -> ["0"]
+      case list.split(eq, 3) {
+        #(head, tail) -> solve_eq_lr(list.append(solve_part(head), tail))
       }
-      solve_eq_lr(list.append(reduced, tail))
     }
   }
 }
@@ -57,34 +67,29 @@ fn is_satisfiable(eq: Equation, operators: List(String)) -> Bool {
   |> list.any(fn(soln) { eq.target == parse_num(soln) })
 }
 
+fn extract(x: #(Equation, Bool)) {
+  case x {
+    #(eq, True) -> Ok(eq.target)
+    _ -> Error(Nil)
+  }
+}
+
+fn is_satisfiable_async(eq: Equation, operators: List(String)) {
+  task.async(fn() { #(eq, is_satisfiable(eq, operators)) })
+}
+
 pub fn solve_a(input: String) -> Int {
   parse_file(input)
-  |> list.map(fn(eq) {
-    task.async(fn() { #(eq, is_satisfiable(eq, ["*", "+"])) })
-  })
+  |> list.map(is_satisfiable_async(_, ["*", "+"]))
   |> list.map(task.await_forever)
-  |> list.filter_map(fn(x) {
-    case x {
-      #(eq, True) -> Ok(eq)
-      _ -> Error(Nil)
-    }
-  })
-  |> list.map(fn(x) { x.target })
+  |> list.filter_map(extract)
   |> list.fold(0, int.add)
 }
 
 pub fn solve_b(input: String) -> Int {
   parse_file(input)
-  |> list.map(fn(eq) {
-    task.async(fn() { #(eq, is_satisfiable(eq, ["*", "+", "||"])) })
-  })
+  |> list.map(is_satisfiable_async(_, ["*", "+", "|"]))
   |> list.map(task.await_forever)
-  |> list.filter_map(fn(x) {
-    case x {
-      #(eq, True) -> Ok(eq)
-      _ -> Error(Nil)
-    }
-  })
-  |> list.map(fn(x) { x.target })
+  |> list.filter_map(extract)
   |> list.fold(0, int.add)
 }

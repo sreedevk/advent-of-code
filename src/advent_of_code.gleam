@@ -1,4 +1,5 @@
 import argv
+import bridge_repair as day07
 import ceres_search as day04
 import gleam/int
 import gleam/io
@@ -91,6 +92,19 @@ pub fn main() {
           io.println(
             "[6] Guard Gallivant (Part 2): "
             <> int.to_string(day06.solve_b(data)),
+          )
+        }),
+        Nil,
+      )
+    }
+    ["7"] -> {
+      result.unwrap(
+        result.map(read("data/day7.txt"), fn(data) {
+          io.println(
+            "[7] Bridge Repair (Part 1): " <> int.to_string(day07.solve_a(data)),
+          )
+          io.println(
+            "[7] Bridge Repair (Part 2): " <> int.to_string(day07.solve_b(data)),
           )
         }),
         Nil,

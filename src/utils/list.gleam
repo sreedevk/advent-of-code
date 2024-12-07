@@ -39,3 +39,11 @@ pub fn max(ls: List(Int)) -> Int {
     }
   })
 }
+
+pub fn repeated_permutation(ls: List(a), n: Int) {
+  use acc, _ <- li.fold(li.range(1, n), [[]])
+  use y <- li.flat_map(acc)
+  use z <- li.map(ls)
+
+  li.append(y, li.wrap(z))
+}

@@ -9,6 +9,7 @@ import historian_hysteria as day01
 import mull_it_over as day03
 import print_queue as day05
 import red_nosed_reports as day02
+import resonant_collinearity as day08
 import simplifile.{read}
 
 pub fn main() {
@@ -105,6 +106,20 @@ pub fn main() {
           )
           io.println(
             "[7] Bridge Repair (Part 2): " <> int.to_string(day07.solve_b(data)),
+          )
+        }),
+        Nil,
+      )
+    }
+
+    ["8"] -> {
+      result.unwrap(
+        result.map(read("data/day8.txt"), fn(data) {
+          io.println(
+            "[8] Bridge Repair (Part 1): " <> int.to_string(day08.solve_a(data)),
+          )
+          io.println(
+            "[8] Bridge Repair (Part 2): " <> int.to_string(day08.solve_b(data)),
           )
         }),
         Nil,

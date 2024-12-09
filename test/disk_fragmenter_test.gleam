@@ -1,5 +1,4 @@
 import disk_fragmenter as day09
-import gleam/string
 import gleeunit/should
 
 pub fn solve_a_test() {

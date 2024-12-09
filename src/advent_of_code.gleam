@@ -1,6 +1,7 @@
 import argv
 import bridge_repair as day07
 import ceres_search as day04
+import disk_fragmenter as day09
 import gleam/int
 import gleam/io
 import gleam/result
@@ -120,6 +121,19 @@ pub fn main() {
           )
           io.println(
             "[8] Bridge Repair (Part 2): " <> int.to_string(day08.solve_b(data)),
+          )
+        }),
+        Nil,
+      )
+    }
+    ["9"] -> {
+      result.unwrap(
+        result.map(read("data/day9.txt"), fn(data) {
+          io.println(
+            "[9] Bridge Repair (Part 1): " <> int.to_string(day09.solve_a(data)),
+          )
+          io.println(
+            "[9] Bridge Repair (Part 2): " <> int.to_string(day09.solve_b(data)),
           )
         }),
         Nil,

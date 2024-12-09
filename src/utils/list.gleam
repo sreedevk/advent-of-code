@@ -21,7 +21,7 @@ pub fn from_pair(p: #(a, a)) -> List(a) {
 pub fn pop(ls: List(a)) -> #(Result(a, Nil), List(a)) {
   case at(ls, li.length(ls) - 1) {
     Ok(someval) -> {
-      #(Ok(someval), li.take(ls, li.length(ls) - 2))
+      #(Ok(someval), li.take(ls, li.length(ls) - 1))
     }
     Error(_) -> #(Error(Nil), ls)
   }

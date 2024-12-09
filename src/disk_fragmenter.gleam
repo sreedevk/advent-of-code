@@ -1,5 +1,4 @@
 import gleam/int
-import gleam/io
 import gleam/list
 import gleam/result
 import gleam/string
@@ -37,9 +36,17 @@ fn disk_map(input: String) -> List(String) {
 }
 
 fn defrag_complete(disk: List(String), current_index: Int) -> Bool {
-  let #(_, after) = list.split(disk, current_index)
+  let #(_, after) = list.split(disk, current_index + 1)
 
   list.all(after, fn(x) { x == "." })
+}
+
+fn rotate_block(disk: List(String), state: List(String)) -> List(String) {
+  case li.pop(disk) {
+    #(Ok("."), rest) -> rotate_block(rest, list.append(state, ["."]))
+    #(Ok(anyval), rest) -> list.append([anyval], list.append(rest, state))
+    #(Error(_), _) -> disk
+  }
 }
 
 fn disk_defrag(disk: List(String), current_index: Int) -> List(String) {
@@ -48,14 +55,16 @@ fn disk_defrag(disk: List(String), current_index: Int) -> List(String) {
     False ->
       case li.at(disk, current_index) {
         Ok(".") -> {
-          let assert #(Ok(popped), inter_disk) = li.pop(disk)
-          let #(before, after) = list.split(inter_disk, current_index)
-          let #(_, inter_after) = list.split(after, 1)
-          io.debug(string.join(disk, ""))
-          disk_defrag(
-            list.append(before, list.append([popped], inter_after)),
-            current_index + 1,
-          )
+          let #(defragged, undefragged) = list.split(disk, current_index)
+          let assert #(["."], remaining_undefragged) =
+            list.split(undefragged, 1)
+          let new_current_disk_map =
+            list.append(
+              defragged,
+              list.append(rotate_block(remaining_undefragged, []), ["."]),
+            )
+
+          disk_defrag(new_current_disk_map, current_index + 1)
         }
         Ok(_) -> disk_defrag(disk, current_index + 1)
         Error(_) -> disk

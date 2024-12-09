@@ -4,64 +4,72 @@ import gleam/result
 import gleam/string
 import utils/list as li
 
-fn generate_file_block(block_count, file_index) -> List(String) {
+type Block {
+  File(Int)
+  None
+}
+
+type Disk =
+  List(Block)
+
+fn generate_file_block(block_count, file_index) -> Disk {
   case block_count {
     "0" -> []
     _ ->
       list.range(1, result.unwrap(int.parse(block_count), 0))
-      |> list.map(fn(_) { int.to_string(file_index / 2) })
+      |> list.map(fn(_) { File(file_index / 2) })
   }
 }
 
-fn generate_space_block(block_count) -> List(String) {
+fn generate_space_block(block_count) -> Disk {
   case block_count {
     "0" -> []
     _ ->
       list.range(1, result.unwrap(int.parse(block_count), 0))
-      |> list.map(fn(_) { "." })
+      |> list.map(fn(_) { None })
   }
 }
 
-fn generate_block(block_count, file_index) -> List(String) {
+fn generate_block(block_count, file_index) -> Disk {
   case int.is_even(file_index) {
     True -> generate_file_block(block_count, file_index)
     False -> generate_space_block(block_count)
   }
 }
 
-fn disk_map(input: String) -> List(String) {
+fn disk_map(input: String) -> Disk {
   string.to_graphemes(input)
   |> list.index_map(generate_block)
   |> list.flatten
 }
 
-fn defrag_complete(disk: List(String), current_index: Int) -> Bool {
+fn defrag_complete(disk: List(Block), current_index: Int) -> Bool {
   let #(_, after) = list.split(disk, current_index + 1)
 
-  list.all(after, fn(x) { x == "." })
+  result.is_error(list.find(after, fn(x) { x != None }))
 }
 
-fn rotate_block(disk: List(String), state: List(String)) -> List(String) {
+fn rotate_block(disk: Disk, state: Disk) -> Disk {
   case li.pop(disk) {
-    #(Ok("."), rest) -> rotate_block(rest, list.append(state, ["."]))
+    #(Ok(None), rest) -> rotate_block(rest, list.append(state, [None]))
     #(Ok(anyval), rest) -> list.append([anyval], list.append(rest, state))
     #(Error(_), _) -> disk
   }
 }
 
-fn disk_defrag(disk: List(String), current_index: Int) -> List(String) {
+fn disk_defrag(disk: Disk, current_index: Int) -> Disk {
   case defrag_complete(disk, current_index) {
     True -> disk
     False ->
       case li.at(disk, current_index) {
-        Ok(".") -> {
+        Ok(None) -> {
           let #(defragged, undefragged) = list.split(disk, current_index)
-          let assert #(["."], remaining_undefragged) =
+          let assert #([None], remaining_undefragged) =
             list.split(undefragged, 1)
           let new_current_disk_map =
             list.append(
               defragged,
-              list.append(rotate_block(remaining_undefragged, []), ["."]),
+              list.append(rotate_block(remaining_undefragged, []), [None]),
             )
 
           disk_defrag(new_current_disk_map, current_index + 1)
@@ -72,9 +80,16 @@ fn disk_defrag(disk: List(String), current_index: Int) -> List(String) {
   }
 }
 
-fn checksum(input: List(String)) -> Int {
+fn get_blkid(blk: Block) -> Result(Int, Nil) {
+  case blk {
+    File(id) -> Ok(id)
+    None -> Error(Nil)
+  }
+}
+
+fn checksum(input: Disk) -> Int {
   input
-  |> list.filter_map(fn(x) { int.parse(x) })
+  |> list.filter_map(fn(x) { get_blkid(x) })
   |> list.index_map(int.multiply)
   |> list.fold(0, int.add)
 }

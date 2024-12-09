@@ -130,10 +130,12 @@ pub fn main() {
       result.unwrap(
         result.map(read("data/day9.txt"), fn(data) {
           io.println(
-            "[9] Bridge Repair (Part 1): " <> int.to_string(day09.solve_a(data)),
+            "[9] Disk Fragmenter (Part 1): "
+            <> int.to_string(day09.solve_a(data)),
           )
           io.println(
-            "[9] Bridge Repair (Part 2): " <> int.to_string(day09.solve_b(data)),
+            "[9] Disk Fragmenter (Part 2): "
+            <> int.to_string(day09.solve_b(data)),
           )
         }),
         Nil,

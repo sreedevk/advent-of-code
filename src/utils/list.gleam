@@ -8,8 +8,23 @@ pub fn index(ls: List(a), item: a) -> Result(Int, Nil) {
   |> res.map(pf)
 }
 
+pub fn at(ls: List(a), i: Int) -> Result(a, Nil) {
+  li.index_map(ls, fn(x, ci) { #(x, ci) })
+  |> li.find(fn(x) { ps(x) == i })
+  |> res.map(pf)
+}
+
 pub fn from_pair(p: #(a, a)) -> List(a) {
   [pf(p), ps(p)]
+}
+
+pub fn pop(ls: List(a)) -> #(Result(a, Nil), List(a)) {
+  case at(ls, li.length(ls) - 1) {
+    Ok(someval) -> {
+      #(Ok(someval), li.take(ls, li.length(ls) - 2))
+    }
+    Error(_) -> #(Error(Nil), ls)
+  }
 }
 
 pub fn index_filter(ls: List(a), f: fn(Int, a) -> Bool) -> List(a) {

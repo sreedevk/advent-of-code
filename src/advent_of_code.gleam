@@ -7,6 +7,7 @@ import gleam/io
 import gleam/result
 import guard_gallivant as day06
 import historian_hysteria as day01
+import hoof_it as day10
 import mull_it_over as day03
 import print_queue as day05
 import red_nosed_reports as day02
@@ -117,10 +118,12 @@ pub fn main() {
       result.unwrap(
         result.map(read("data/day8.txt"), fn(data) {
           io.println(
-            "[8] Bridge Repair (Part 1): " <> int.to_string(day08.solve_a(data)),
+            "[8] Resonant Collinearity (Part 1): "
+            <> int.to_string(day08.solve_a(data)),
           )
           io.println(
-            "[8] Bridge Repair (Part 2): " <> int.to_string(day08.solve_b(data)),
+            "[8] Resonant Collinearity (Part 2): "
+            <> int.to_string(day08.solve_b(data)),
           )
         }),
         Nil,
@@ -136,6 +139,19 @@ pub fn main() {
           io.println(
             "[9] Disk Fragmenter (Part 2): "
             <> int.to_string(day09.solve_b(data)),
+          )
+        }),
+        Nil,
+      )
+    }
+    ["10"] -> {
+      result.unwrap(
+        result.map(read("data/day10.txt"), fn(data) {
+          io.println(
+            "[10] Hoof It (Part 1): " <> int.to_string(day10.solve_a(data)),
+          )
+          io.println(
+            "[10] Hoof It (Part 2): " <> int.to_string(day10.solve_b(data)),
           )
         }),
         Nil,
